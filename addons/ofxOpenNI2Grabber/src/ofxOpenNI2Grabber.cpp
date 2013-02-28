@@ -14,6 +14,93 @@ ofxOpenNI2Grabber::ofxOpenNI2Grabber()
 	isReady = false;	
 }
 
+void ofxOpenNI2Grabber::printModes(openni::SensorType sensorType)
+{
+	string name;
+	
+	switch (sensorType)
+	{
+		case openni::SENSOR_COLOR:
+		{
+			name = "COLOR";
+			break;
+		}
+		case openni::SENSOR_DEPTH:
+		{
+			name = "DEPTH";
+			break;
+		}
+		case openni::SENSOR_IR:
+		{
+			name = "IR";
+			break;
+		}
+	}
+	const openni::SensorInfo* sensorInfo = device.getSensorInfo(sensorType);
+	const openni::Array<openni::VideoMode>& videoModes  = sensorInfo->getSupportedVideoModes();
+	for (int i=0; i<videoModes.getSize(); i++) 
+	{
+		openni::VideoMode mode = videoModes[i];
+		
+		ofLogVerbose() << name << " MODE: "	<< i;
+		
+		openni::PixelFormat pixelFormat = mode.getPixelFormat();
+		string pixelFormatName;
+		switch (pixelFormat) 
+		{
+			case openni::PIXEL_FORMAT_DEPTH_1_MM:
+			{
+				pixelFormatName = "PIXEL_FORMAT_DEPTH_1_MM";
+				break;
+			}
+			case openni::PIXEL_FORMAT_DEPTH_100_UM:
+			{
+				pixelFormatName = "PIXEL_FORMAT_DEPTH_100_UM";
+				break;
+			}
+			case openni::PIXEL_FORMAT_SHIFT_9_2:
+			{
+				pixelFormatName = "PIXEL_FORMAT_SHIFT_9_2";
+				break;
+			}
+			case openni::PIXEL_FORMAT_SHIFT_9_3:
+			{
+				pixelFormatName = "PIXEL_FORMAT_SHIFT_9_3";
+				break;
+			}
+			case openni::PIXEL_FORMAT_RGB888:
+			{
+				pixelFormatName = "PIXEL_FORMAT_RGB888";
+				break;
+			}
+			case openni::PIXEL_FORMAT_YUV422:
+			{
+				pixelFormatName = "PIXEL_FORMAT_YUV422";
+				break;
+			}
+			case openni::PIXEL_FORMAT_GRAY8:
+			{
+				pixelFormatName = "PIXEL_FORMAT_GRAY8";
+				break;
+			}
+			case openni::PIXEL_FORMAT_GRAY16:
+			{
+				pixelFormatName = "PIXEL_FORMAT_GRAY16";
+				break;
+			}
+			case openni::PIXEL_FORMAT_JPEG:
+			{
+				pixelFormatName = "PIXEL_FORMAT_JPEG";
+				break;
+			}
+				
+		}
+		ofLogVerbose() << "PixelFormat: "	<< pixelFormatName;
+		ofLogVerbose() << "ResolutionX: "	<< mode.getResolutionX();
+		ofLogVerbose() << "ResolutionY: "	<< mode.getResolutionY();
+		ofLogVerbose() << "FPS: "			<< mode.getFps();
+	}
+}
 
 void ofxOpenNI2Grabber::setup()
 {
@@ -29,14 +116,29 @@ void ofxOpenNI2Grabber::setup()
 	{
 		ofLogVerbose() << "Device open PASS" <<  deviceURI;
 		
+		printModes(openni::SENSOR_COLOR);
+	
+		printModes(openni::SENSOR_DEPTH);
+		printModes(openni::SENSOR_IR);
+		
+		
 	}else 
 	{
 		ofLog(OF_LOG_VERBOSE, "Device open FAIL:\n%s\n", openni::OpenNI::getExtendedError());
 		close();
 	}
+	const openni::SensorInfo* colorSensorInfo = device.getSensorInfo(openni::SENSOR_COLOR);
+	const openni::Array<openni::VideoMode>& colorVideoModes  = colorSensorInfo->getSupportedVideoModes();
+	
+	
+	
+	const openni::SensorInfo* depthSensorInfo = device.getSensorInfo(openni::SENSOR_DEPTH);
+	const openni::Array<openni::VideoMode>& depthVideoModes  = depthSensorInfo->getSupportedVideoModes();
+	
+	
 	
 	status = depth.create(device, openni::SENSOR_DEPTH);
-	
+	depth.setVideoMode(depthVideoModes[8]);
 	if (status == openni::STATUS_OK)
 	{
 		ofLogVerbose() << "Find depth stream PASS";
@@ -57,6 +159,7 @@ void ofxOpenNI2Grabber::setup()
 	}
 	
 	status = color.create(device, openni::SENSOR_COLOR);
+	color.setVideoMode(colorVideoModes[8]);
 	if (status == openni::STATUS_OK)
 	{
 		ofLogVerbose() << "Find color stream PASS";
@@ -120,6 +223,8 @@ void ofxOpenNI2Grabber::setup()
 	{
 		width = depthWidth;
 		height = depthHeight;
+		ofLogVerbose() << "width: " << width;
+		ofLogVerbose() << "height: " << height;
 	}else
 	{
 		ofLog(OF_LOG_ERROR, "Error - expect color and depth to be in same resolution: D: %dx%d, C: %dx%d\n",

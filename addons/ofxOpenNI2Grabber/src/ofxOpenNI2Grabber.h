@@ -56,4 +56,6 @@ public:
 	
 	void generateDepthPixels();
 	bool isReady;
+	
+	void printModes(openni::SensorType sensorType);
 };
