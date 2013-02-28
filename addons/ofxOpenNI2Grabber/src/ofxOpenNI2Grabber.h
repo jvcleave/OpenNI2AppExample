@@ -11,6 +11,7 @@
 
 class ofxOpenNI2Grabber
 {
+public:
 	ofxOpenNI2Grabber();
 	void setup();
 	void update();
