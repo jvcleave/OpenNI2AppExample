@@ -11,9 +11,15 @@
 
 ofxOpenNI2Grabber::ofxOpenNI2Grabber()
 {
+	isReady = false;	
+}
+
+
+void ofxOpenNI2Grabber::setup()
+{
 	openni::Status status = openni::STATUS_OK;
 	
-	const char* deviceURI = openni::ANY_DEVICE;
+	deviceURI = openni::ANY_DEVICE;
 	status = openni::OpenNI::initialize();
 	
 	ofLog(OF_LOG_VERBOSE, "After initialization:\n%s\n", openni::OpenNI::getExtendedError());
@@ -72,43 +78,129 @@ ofxOpenNI2Grabber::ofxOpenNI2Grabber()
 	if (depth.isValid())
 	{
 		ofLogVerbose() << "DEPTH streams VALID";
+		depthVideoMode = depth.getVideoMode();
+		depthWidth = depthVideoMode.getResolutionX();
+		depthHeight = depthVideoMode.getResolutionY();
+		
+		depthPixels[0].allocate(depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
+		depthPixels[1].allocate(depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
+		currentDepthPixels = &depthPixels[0];
+		backDepthPixels = &depthPixels[1];
+		
+		depthTexture.allocate(depthWidth, depthHeight, GL_RGBA);
+		
 	}else 
 	{
 		ofLogVerbose() << "DEPTH streams INVALID";
 		close();
 	}
-
+	
 	if (color.isValid())
 	{
 		ofLogVerbose() << "COLOR stream VALID";
+		colorVideoMode = color.getVideoMode();
+		colorWidth = colorVideoMode.getResolutionX();
+		colorHeight = colorVideoMode.getResolutionY();
+		
+		rgbPixels[0].allocate(colorWidth, colorHeight, OF_IMAGE_COLOR);
+		rgbPixels[1].allocate(colorWidth, colorHeight, OF_IMAGE_COLOR);
+		currentRGBPixels = &rgbPixels[0];
+		backRGBPixels = &rgbPixels[1];
+		
+		rgbTexture.allocate(colorWidth, colorHeight, GL_RGB);
+		
 	}else 
 	{
 		ofLogVerbose() << "COLOR stream INVALID";
 		close();
 		
 	}
-	
-}
 
-
-void ofxOpenNI2Grabber::setup()
-{
-
+	if (depthWidth == colorWidth && depthHeight == colorHeight)
+	{
+		width = depthWidth;
+		height = depthHeight;
+	}else
+	{
+		ofLog(OF_LOG_ERROR, "Error - expect color and depth to be in same resolution: D: %dx%d, C: %dx%d\n",
+			   depthWidth, depthHeight,
+			   colorWidth, colorHeight);
+	}
+	streams = new openni::VideoStream*[2];
+	streams[0] = &depth;
+	streams[1] = &color;
+	isReady = true;
 }
 
 
 void ofxOpenNI2Grabber::update()
 {
-
+	int changedIndex;
+	openni::Status rc = openni::OpenNI::waitForAnyStream(streams, 2, &changedIndex);
+	if (rc != openni::STATUS_OK)
+	{
+		ofLogError() << "Wait failed";
+		return;
+	}
+	switch (changedIndex)
+	{
+		case 0:
+		{
+			depth.readFrame(&depthFrame);
+			break;
+		}
+		case 1:
+		{
+			color.readFrame(&colorFrame);
+			backRGBPixels->setFromPixels((unsigned char *)colorFrame.getData(), colorWidth, colorHeight, OF_IMAGE_COLOR);
+			rgbTexture.loadData(*backRGBPixels);
+			break;
+		}
+		default:
+		{
+			ofLogError() << "Error in wait";
+		}
+	}
 }
 
 
 void ofxOpenNI2Grabber::draw()
 {
-	
+	rgbTexture.draw(0, 0);
+
 }
 
+void ofxOpenNI2Grabber::generateDepthPixels()
+{
+	
+	
+	/*const openni::DepthPixel* pDepthRow = (const openni::DepthPixel*)depthFrame.getData();
+	openni::RGB888Pixel* pTexRow = m_pTexMap + depthFrame.getCropOriginY() * m_nTexMapX;
+	int rowSize = depthFrame.getStrideInBytes() / sizeof(openni::DepthPixel);
+	
+	for (int y = 0; y < depthFrame.getHeight(); ++y)
+	{
+		const openni::DepthPixel* pDepth = pDepthRow;
+		openni::RGB888Pixel* pTex = pTexRow + depthFrame.getCropOriginX();
+		
+		for (int x = 0; x < depthFrame.getWidth(); ++x, ++pDepth, ++pTex)
+		{
+			if (*pDepth != 0)
+			{
+				int nHistValue = m_pDepthHist[*pDepth];
+				pTex->r = nHistValue;
+				pTex->g = nHistValue;
+				pTex->b = 0;
+			}
+		}
+		
+		pDepthRow += rowSize;
+		pTexRow += m_nTexMapX;
+	}*/
+	
+}
 void ofxOpenNI2Grabber::close()
 {
+	isReady = false;
 	openni::OpenNI::shutdown();
 }

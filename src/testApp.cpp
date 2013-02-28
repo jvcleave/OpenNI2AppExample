@@ -9,12 +9,20 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
-
+	if (oniGrabber.isReady) 
+	{
+		oniGrabber.update();
+	}
+	
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
+	if (oniGrabber.isReady) 
+	{
+		oniGrabber.draw();
+	}
+	
 }
 void testApp::exit()
 {

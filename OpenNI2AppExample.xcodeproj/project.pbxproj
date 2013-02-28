@@ -78,6 +78,8 @@
 		03CB230016DF218400892016 /* libXnLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXnLib.a; path = addons/ofxOpenNI2Grabber/libs/openni2/libs/libXnLib.a; sourceTree = SOURCE_ROOT; };
 		03CB233116DF25AE00892016 /* ofxOpenNI2Grabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2Grabber.h; sourceTree = "<group>"; };
 		03CB233216DF25AE00892016 /* ofxOpenNI2Grabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOpenNI2Grabber.cpp; sourceTree = "<group>"; };
+		03CB233C16DF2B6F00892016 /* Viewer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Viewer.cpp; path = ../../../../../OPENNI/2.0/OpenNI2/Samples/SimpleViewer/Viewer.cpp; sourceTree = SOURCE_ROOT; };
+		03CB233D16DF2B6F00892016 /* Viewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Viewer.h; path = ../../../../../OPENNI/2.0/OpenNI2/Samples/SimpleViewer/Viewer.h; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -150,6 +152,8 @@
 		03CB233016DF259C00892016 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				03CB233C16DF2B6F00892016 /* Viewer.cpp */,
+				03CB233D16DF2B6F00892016 /* Viewer.h */,
 				03CB233116DF25AE00892016 /* ofxOpenNI2Grabber.h */,
 				03CB233216DF25AE00892016 /* ofxOpenNI2Grabber.cpp */,
 			);

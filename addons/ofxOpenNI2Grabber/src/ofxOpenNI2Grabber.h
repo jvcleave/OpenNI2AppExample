@@ -19,5 +19,41 @@ public:
 	void close();
 	
 	openni::Device device;
-	openni::VideoStream depth, color;
+	const char* deviceURI;
+
+	openni::VideoStream depth;
+	openni::VideoMode depthVideoMode;
+	openni::VideoFrameRef depthFrame;
+	int depthWidth;
+	int depthHeight;
+	
+	openni::VideoStream color;
+	openni::VideoMode colorVideoMode;
+	openni::VideoFrameRef colorFrame;
+	int colorWidth;
+	int colorHeight;
+	
+	int width;
+	int height;
+	
+	openni::VideoStream**		streams;
+	ofTexture depthTexture;
+	
+	ofPixels depthPixels[2];
+	ofPixels* backDepthPixels;
+	ofPixels* currentDepthPixels;
+	
+	// depth raw
+	ofShortPixels depthRawPixels[2];
+	ofShortPixels* backDepthRawPixels;
+	ofShortPixels* currentDepthRawPixels;
+	
+	// rgb
+	ofTexture rgbTexture;
+	ofPixels rgbPixels[2];
+	ofPixels* backRGBPixels;
+	ofPixels* currentRGBPixels;
+	
+	void generateDepthPixels();
+	bool isReady;
 };
