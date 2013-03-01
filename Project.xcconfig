@@ -7,3 +7,4 @@ OF_PATH = ../../..
 
 OTHER_LDFLAGS = $(OF_CORE_LIBS) 
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS)
+USER_HEADER_SEARCH_PATHS = $(PROJECT_DIR)/addons/ofxOpenNI2Grabber/libs/libfreenect/include/libfreenect

@@ -1,24 +1,34 @@
 #include "testApp.h"
 
+
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
-	oniGrabber.setup();
-
+	int maxAttempts = 3;
+	int attemptCounter = 0;
+	ofxOpenNI2Grabber::Settings cameraSettings;
+	while (!isReady) 
+	{
+		isReady = oniGrabber.setup(cameraSettings);
+		attemptCounter++;
+		ofLogVerbose() << "attemptCounter: " << attemptCounter;
+		if (attemptCounter == maxAttempts) 
+		{
+			ofExit(0);
+		}
+	}
+	ofLogVerbose() << "started";
+	oniGrabber.startThread(false, false);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	if (oniGrabber.isReady) 
-	{
-		oniGrabber.update();
-	}
-	
+	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	if (oniGrabber.isReady) 
+	if (isReady) 
 	{
 		oniGrabber.draw();
 	}
@@ -27,7 +37,11 @@ void testApp::draw(){
 void testApp::exit()
 {
 	ofLogVerbose() << "EXIT";
-	oniGrabber.close();
+	if (isReady) 
+	{
+		isReady = oniGrabber.close();
+	}
+	
 }
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){

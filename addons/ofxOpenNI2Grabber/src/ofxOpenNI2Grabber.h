@@ -8,15 +8,18 @@
  */
 #include "ofMain.h"
 #include <OpenNI.h>
+#include "ofxOpenNI2GrabberUtils.h"
 
-class ofxOpenNI2Grabber
+class ofxOpenNI2Grabber: public ofThread
 {
 public:
+	struct Settings;
+	
 	ofxOpenNI2Grabber();
-	void setup();
-	void update();
+	bool setup(Settings _settings);
+	void readFrame();
 	void draw();
-	void close();
+	bool close();
 	
 	openni::Device device;
 	const char* deviceURI;
@@ -33,12 +36,8 @@ public:
 	int colorWidth;
 	int colorHeight;
 	
-	int width;
-	int height;
-	
 	openni::VideoStream**		streams;
 	ofTexture depthTexture;
-	
 	ofPixels depthPixels[2];
 	ofPixels* backDepthPixels;
 	ofPixels* currentDepthPixels;
@@ -57,5 +56,29 @@ public:
 	void generateDepthPixels();
 	bool isReady;
 	
-	void printModes(openni::SensorType sensorType);
+	float	deviceMaxDepth;
+	
+	bool isKinect;
+
+	const openni::VideoMode* findMode(openni::Device& device, openni::SensorType sensorType);
+	void allocateDepthBuffers();
+	void allocateDepthRawBuffers();
+	void allocateColorBuffers();
+	struct Settings {
+		int		width;					// camera width
+		int		height;					// camera height
+		int		fps;					// camera fps
+		bool	doDepth;				// use Depth camera
+		bool	doColor;				// use RGB camera
+		openni::PixelFormat depthPixelFormat; //PIXEL_FORMAT_DEPTH_1_MM, PIXEL_FORMAT_DEPTH_100_UM, PIXEL_FORMAT_SHIFT_9_2, PIXEL_FORMAT_SHIFT_9_3
+		openni::PixelFormat colorPixelFormat; //PIXEL_FORMAT_RGB888, PIXEL_FORMAT_YUV422, PIXEL_FORMAT_GRAY8, PIXEL_FORMAT_GRAY16, PIXEL_FORMAT_JPEG
+		bool isKinect;
+		
+		Settings();
+	};
+	Settings 			settings;
+protected:
+	void threadedFunction();
+	
+	
 };
