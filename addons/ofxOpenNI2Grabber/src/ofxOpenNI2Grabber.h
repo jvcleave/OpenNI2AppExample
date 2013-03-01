@@ -56,6 +56,14 @@ public:
 	void generateDepthPixels();
 	bool isReady;
 	
-	void printModes(openni::SensorType sensorType);
+	
+	void printDeviceInfo();
 	float	deviceMaxDepth;
+	
+	bool isKinect;
+
+	
+	void printModes();
+	void printMode(openni::VideoMode mode);
+	
 };
