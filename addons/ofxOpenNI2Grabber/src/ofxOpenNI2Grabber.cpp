@@ -9,6 +9,7 @@
 
 #include "ofxOpenNI2Grabber.h"
 
+
 ofxOpenNI2Grabber::ofxOpenNI2Grabber()
 {
 	isReady = false;	
@@ -252,6 +253,8 @@ void ofxOpenNI2Grabber::update()
 		case 0:
 		{
 			depth.readFrame(&depthFrame);
+			backDepthPixels->setFromPixels((unsigned char *)depthFrame.getData(), depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
+			depthTexture.loadData(*backDepthPixels);
 			break;
 		}
 		case 1:
@@ -259,6 +262,7 @@ void ofxOpenNI2Grabber::update()
 			color.readFrame(&colorFrame);
 			backRGBPixels->setFromPixels((unsigned char *)colorFrame.getData(), colorWidth, colorHeight, OF_IMAGE_COLOR);
 			rgbTexture.loadData(*backRGBPixels);
+			
 			break;
 		}
 		default:
@@ -272,6 +276,8 @@ void ofxOpenNI2Grabber::update()
 void ofxOpenNI2Grabber::draw()
 {
 	rgbTexture.draw(0, 0);
+	depthTexture.draw(width, 0);
+
 
 }
 
