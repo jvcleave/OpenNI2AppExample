@@ -21,4 +21,5 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 	ofxOpenNI2Grabber oniGrabber;
+	bool isReady;
 };

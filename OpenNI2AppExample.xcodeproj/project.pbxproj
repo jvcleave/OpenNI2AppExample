@@ -91,6 +91,7 @@
 		03CB255916E055BC00892016 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNI.h; sourceTree = "<group>"; };
 		03CB255A16E055BC00892016 /* PS1080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PS1080.h; sourceTree = "<group>"; };
 		03CB255C16E055BC00892016 /* OniPlatformWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatformWin32.h; sourceTree = "<group>"; };
+		03CB269516E080BD00892016 /* ofxOpenNI2GrabberUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2GrabberUtils.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -167,6 +168,7 @@
 				03CB233D16DF2B6F00892016 /* Viewer.h */,
 				03CB233116DF25AE00892016 /* ofxOpenNI2Grabber.h */,
 				03CB233216DF25AE00892016 /* ofxOpenNI2Grabber.cpp */,
+				03CB269516E080BD00892016 /* ofxOpenNI2GrabberUtils.h */,
 			);
 			name = src;
 			path = addons/ofxOpenNI2Grabber/src;
@@ -444,7 +446,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\ncp -R \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/OpenNI2\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/OpenNI2\";\n#cp -f \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/libOpenNI2.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libOpenNI2.dylib\";\n";
+			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\n#you will need this if you use on a different project\ncp -R \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/OpenNI2\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/OpenNI2\";\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
