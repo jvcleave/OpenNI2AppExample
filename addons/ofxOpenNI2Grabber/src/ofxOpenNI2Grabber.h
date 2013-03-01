@@ -38,7 +38,6 @@ public:
 	
 	openni::VideoStream**		streams;
 	ofTexture depthTexture;
-	
 	ofPixels depthPixels[2];
 	ofPixels* backDepthPixels;
 	ofPixels* currentDepthPixels;
@@ -58,4 +57,5 @@ public:
 	bool isReady;
 	
 	void printModes(openni::SensorType sensorType);
+	float	deviceMaxDepth;
 };

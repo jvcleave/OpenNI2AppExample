@@ -185,11 +185,12 @@ void ofxOpenNI2Grabber::setup()
 		depthVideoMode = depth.getVideoMode();
 		depthWidth = depthVideoMode.getResolutionX();
 		depthHeight = depthVideoMode.getResolutionY();
-		
+		deviceMaxDepth	= depth.getMaxPixelValue();
+		ofLogVerbose() << "deviceMaxDepth" << deviceMaxDepth;
 		depthPixels[0].allocate(depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
 		depthPixels[1].allocate(depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
 		currentDepthPixels = &depthPixels[0];
-		backDepthPixels = &depthPixels[1];
+		//backDepthPixels = &depthPixels[0];
 		
 		depthTexture.allocate(depthWidth, depthHeight, GL_RGBA);
 		
@@ -252,9 +253,10 @@ void ofxOpenNI2Grabber::update()
 	{
 		case 0:
 		{
-			depth.readFrame(&depthFrame);
-			backDepthPixels->setFromPixels((unsigned char *)depthFrame.getData(), depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
-			depthTexture.loadData(*backDepthPixels);
+			
+			//currentDepthPixels->setFromPixels((unsigned char *)depthFrame.getData(), depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
+			generateDepthPixels();
+			depthTexture.loadData(*currentDepthPixels);
 			break;
 		}
 		case 1:
@@ -280,38 +282,46 @@ void ofxOpenNI2Grabber::draw()
 
 
 }
-
 void ofxOpenNI2Grabber::generateDepthPixels()
 {
-	
-	
-	/*const openni::DepthPixel* pDepthRow = (const openni::DepthPixel*)depthFrame.getData();
-	openni::RGB888Pixel* pTexRow = m_pTexMap + depthFrame.getCropOriginY() * m_nTexMapX;
-	int rowSize = depthFrame.getStrideInBytes() / sizeof(openni::DepthPixel);
-	
-	for (int y = 0; y < depthFrame.getHeight(); ++y)
+	depth.readFrame(&depthFrame);
+	const openni::DepthPixel* oniDepthPixels = (const openni::DepthPixel*)depthFrame.getData();
+
+	float max = 255;
+	for (unsigned short y = 0; y < depthHeight; y++) 
 	{
-		const openni::DepthPixel* pDepth = pDepthRow;
-		openni::RGB888Pixel* pTex = pTexRow + depthFrame.getCropOriginX();
-		
-		for (int x = 0; x < depthFrame.getWidth(); ++x, ++pDepth, ++pTex)
+		unsigned char * texture = currentDepthPixels->getPixels() + y * depthWidth * 4;
+		for (unsigned short  x = 0; x < depthWidth; x++, oniDepthPixels++, texture += 4)
 		{
-			if (*pDepth != 0)
+			unsigned char red = 0;
+			unsigned char green = 0;
+			unsigned char blue = 0;
+			unsigned char alpha = 255;
+			
+			unsigned short col_index;
+			
+			unsigned char a = (unsigned char)(((*oniDepthPixels) / ( deviceMaxDepth / max)));
+			red		= a;
+			green	= a;
+			blue	= a;
+			
+			texture[0] = red;
+			texture[1] = green;
+			texture[2] = blue;
+			
+			if (*oniDepthPixels == 0)
 			{
-				int nHistValue = m_pDepthHist[*pDepth];
-				pTex->r = nHistValue;
-				pTex->g = nHistValue;
-				pTex->b = 0;
+				texture[3] = 0;
+			} else	
+			{
+				texture[3] = alpha;
 			}
 		}
-		
-		pDepthRow += rowSize;
-		pTexRow += m_nTexMapX;
-	}*/
+	}
 	
 }
 void ofxOpenNI2Grabber::close()
 {
 	isReady = false;
-	openni::OpenNI::shutdown();
+	//openni::OpenNI::shutdown();
 }
