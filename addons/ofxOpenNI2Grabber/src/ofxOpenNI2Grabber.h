@@ -65,7 +65,7 @@ public:
 	float	deviceMaxDepth;
 	
 	bool isKinect;
-
+//hometest_single.oni
 	const VideoMode* findMode(Device& device, SensorType sensorType);
 	void allocateDepthBuffers();
 	void allocateDepthRawBuffers();
@@ -82,7 +82,8 @@ public:
 		PixelFormat depthPixelFormat; //PIXEL_FORMAT_DEPTH_1_MM, PIXEL_FORMAT_DEPTH_100_UM, PIXEL_FORMAT_SHIFT_9_2, PIXEL_FORMAT_SHIFT_9_3
 		PixelFormat colorPixelFormat; //PIXEL_FORMAT_RGB888, PIXEL_FORMAT_YUV422, PIXEL_FORMAT_GRAY8, PIXEL_FORMAT_GRAY16, PIXEL_FORMAT_JPEG
 		bool isKinect;
-		
+		bool	useOniFile;
+		string oniFilePath;
 		Settings();
 	};
 	Settings 			settings;
