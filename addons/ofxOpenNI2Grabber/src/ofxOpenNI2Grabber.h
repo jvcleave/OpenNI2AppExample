@@ -7,10 +7,16 @@
  *
  */
 #include "ofMain.h"
-#include <OpenNI.h>
+#include "OpenNI.h"
 #include "ofxOpenNI2GrabberUtils.h"
 
-class ofxOpenNI2Grabber: public ofThread
+using namespace openni;
+
+class ofxOpenNI2Grabber: 
+public ofThread, 
+public OpenNI::DeviceStateChangedListener,
+public OpenNI::DeviceConnectedListener,
+public OpenNI::DeviceDisconnectedListener
 {
 public:
 	struct Settings;
@@ -21,22 +27,22 @@ public:
 	void draw();
 	bool close();
 	
-	openni::Device device;
+	Device device;
 	const char* deviceURI;
 
-	openni::VideoStream depth;
-	openni::VideoMode depthVideoMode;
-	openni::VideoFrameRef depthFrame;
+	VideoStream depth;
+	VideoMode depthVideoMode;
+	VideoFrameRef depthFrame;
 	int depthWidth;
 	int depthHeight;
 	
-	openni::VideoStream color;
-	openni::VideoMode colorVideoMode;
-	openni::VideoFrameRef colorFrame;
+	VideoStream color;
+	VideoMode colorVideoMode;
+	VideoFrameRef colorFrame;
 	int colorWidth;
 	int colorHeight;
-	
-	openni::VideoStream**		streams;
+	vector<VideoStream*> streams;
+	//VideoStream**		streams;
 	ofTexture depthTexture;
 	ofPixels depthPixels[2];
 	ofPixels* backDepthPixels;
@@ -60,7 +66,7 @@ public:
 	
 	bool isKinect;
 
-	const openni::VideoMode* findMode(openni::Device& device, openni::SensorType sensorType);
+	const VideoMode* findMode(Device& device, SensorType sensorType);
 	void allocateDepthBuffers();
 	void allocateDepthRawBuffers();
 	void allocateColorBuffers();
@@ -69,14 +75,29 @@ public:
 		int		height;					// camera height
 		int		fps;					// camera fps
 		bool	doDepth;				// use Depth camera
+		bool	doRawDepth;				// capture raw Depth info
 		bool	doColor;				// use RGB camera
-		openni::PixelFormat depthPixelFormat; //PIXEL_FORMAT_DEPTH_1_MM, PIXEL_FORMAT_DEPTH_100_UM, PIXEL_FORMAT_SHIFT_9_2, PIXEL_FORMAT_SHIFT_9_3
-		openni::PixelFormat colorPixelFormat; //PIXEL_FORMAT_RGB888, PIXEL_FORMAT_YUV422, PIXEL_FORMAT_GRAY8, PIXEL_FORMAT_GRAY16, PIXEL_FORMAT_JPEG
+		bool	doPointCloud;			// option for point cloud
+		bool	doPointCloudColor;		// color point cloud
+		PixelFormat depthPixelFormat; //PIXEL_FORMAT_DEPTH_1_MM, PIXEL_FORMAT_DEPTH_100_UM, PIXEL_FORMAT_SHIFT_9_2, PIXEL_FORMAT_SHIFT_9_3
+		PixelFormat colorPixelFormat; //PIXEL_FORMAT_RGB888, PIXEL_FORMAT_YUV422, PIXEL_FORMAT_GRAY8, PIXEL_FORMAT_GRAY16, PIXEL_FORMAT_JPEG
 		bool isKinect;
 		
 		Settings();
 	};
 	Settings 			settings;
+	
+	//OpenNI::DeviceStateChangedListener callback
+	void onDeviceStateChanged(const DeviceInfo*, DeviceState);
+	
+	//OpenNI::DeviceConnectedListener callback
+	void onDeviceConnected(const DeviceInfo*);
+	
+	//OpenNI::DeviceDisconnectedListener callback
+	void onDeviceDisconnected(const DeviceInfo*);
+	ofMesh pointCloud;
+	bool isPointCloudValid;
+	ofMesh & getPointCloud();
 protected:
 	void threadedFunction();
 	

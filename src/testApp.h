@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOpenNI2Grabber.h"
-
+#include "ofxGameCamera.h"
 
 class testApp : public ofBaseApp{
 	public:
@@ -22,4 +22,5 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 	ofxOpenNI2Grabber oniGrabber;
 	bool isReady;
+	ofEasyCam camera;
 };

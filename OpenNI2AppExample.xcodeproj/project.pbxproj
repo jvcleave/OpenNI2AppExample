@@ -12,6 +12,11 @@
 		03CB247E16DFFEAC00892016 /* libfreenect_sync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB247C16DFFEAC00892016 /* libfreenect_sync.a */; };
 		03CB249316E0009F00892016 /* libXnLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB249216E0009F00892016 /* libXnLib.a */; };
 		03CB249D16E0013E00892016 /* libOpenNI2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB249C16E0013E00892016 /* libOpenNI2.a */; };
+		03CB27D816E15CDD00892016 /* ofxGameCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB27CD16E15CDD00892016 /* ofxGameCamera.cpp */; };
+		03CB27D916E15CDD00892016 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB27D116E15CDD00892016 /* tinyxml.cpp */; };
+		03CB27DA16E15CDD00892016 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB27D316E15CDD00892016 /* tinyxmlerror.cpp */; };
+		03CB27DB16E15CDD00892016 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB27D416E15CDD00892016 /* tinyxmlparser.cpp */; };
+		03CB27DC16E15CDD00892016 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB27D616E15CDD00892016 /* ofxXmlSettings.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -92,6 +97,14 @@
 		03CB255A16E055BC00892016 /* PS1080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PS1080.h; sourceTree = "<group>"; };
 		03CB255C16E055BC00892016 /* OniPlatformWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatformWin32.h; sourceTree = "<group>"; };
 		03CB269516E080BD00892016 /* ofxOpenNI2GrabberUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2GrabberUtils.h; sourceTree = "<group>"; };
+		03CB27CD16E15CDD00892016 /* ofxGameCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGameCamera.cpp; sourceTree = "<group>"; };
+		03CB27CE16E15CDD00892016 /* ofxGameCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGameCamera.h; sourceTree = "<group>"; };
+		03CB27D116E15CDD00892016 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
+		03CB27D216E15CDD00892016 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
+		03CB27D316E15CDD00892016 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
+		03CB27D416E15CDD00892016 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
+		03CB27D616E15CDD00892016 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
+		03CB27D716E15CDD00892016 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -283,9 +296,59 @@
 			path = Win32;
 			sourceTree = "<group>";
 		};
+		03CB27CB16E15CDD00892016 /* ofxGameCamera */ = {
+			isa = PBXGroup;
+			children = (
+				03CB27CC16E15CDD00892016 /* src */,
+			);
+			name = ofxGameCamera;
+			path = addons/ofxGameCamera;
+			sourceTree = "<group>";
+		};
+		03CB27CC16E15CDD00892016 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				03CB27CD16E15CDD00892016 /* ofxGameCamera.cpp */,
+				03CB27CE16E15CDD00892016 /* ofxGameCamera.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		03CB27CF16E15CDD00892016 /* ofxXmlSettings */ = {
+			isa = PBXGroup;
+			children = (
+				03CB27D016E15CDD00892016 /* libs */,
+				03CB27D516E15CDD00892016 /* src */,
+			);
+			name = ofxXmlSettings;
+			path = addons/ofxXmlSettings;
+			sourceTree = "<group>";
+		};
+		03CB27D016E15CDD00892016 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				03CB27D116E15CDD00892016 /* tinyxml.cpp */,
+				03CB27D216E15CDD00892016 /* tinyxml.h */,
+				03CB27D316E15CDD00892016 /* tinyxmlerror.cpp */,
+				03CB27D416E15CDD00892016 /* tinyxmlparser.cpp */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		03CB27D516E15CDD00892016 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				03CB27D616E15CDD00892016 /* ofxXmlSettings.cpp */,
+				03CB27D716E15CDD00892016 /* ofxXmlSettings.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				03CB27CB16E15CDD00892016 /* ofxGameCamera */,
+				03CB27CF16E15CDD00892016 /* ofxXmlSettings */,
 				03CB232E16DF259100892016 /* ofxOpenNI2Grabber */,
 			);
 			name = addons;
@@ -458,6 +521,11 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				03CB233316DF25AE00892016 /* ofxOpenNI2Grabber.cpp in Sources */,
+				03CB27D816E15CDD00892016 /* ofxGameCamera.cpp in Sources */,
+				03CB27D916E15CDD00892016 /* tinyxml.cpp in Sources */,
+				03CB27DA16E15CDD00892016 /* tinyxmlerror.cpp in Sources */,
+				03CB27DB16E15CDD00892016 /* tinyxmlparser.cpp in Sources */,
+				03CB27DC16E15CDD00892016 /* ofxXmlSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
