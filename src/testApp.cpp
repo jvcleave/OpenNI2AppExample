@@ -7,9 +7,22 @@ void testApp::setup(){
 	int maxAttempts = 3;
 	int attemptCounter = 0;
 	ofxOpenNI2Grabber::Settings cameraSettings;
-	cameraSettings.depthPixelFormat = openni::PIXEL_FORMAT_DEPTH_1_MM;
-	cameraSettings.useOniFile = true;
-	cameraSettings.oniFilePath = ofToDataPath("hometest_single.oni", true);
+	
+	
+	ofDirectory currentONIDirectory(ofToDataPath("current", true));
+	if (currentONIDirectory.exists()) 
+	{
+		currentONIDirectory.listDir();
+		vector<ofFile> files = currentONIDirectory.getFiles();
+		if (files.size()>0) 
+		{
+			cameraSettings.useOniFile = true;
+			cameraSettings.oniFilePath = files[0].path();
+			ofLogVerbose() << "using oniFilePath : " << cameraSettings.oniFilePath;
+		}		
+	}
+	
+	//cameraSettings.depthPixelFormat = openni::PIXEL_FORMAT_DEPTH_1_MM;
 	while (!isReady) 
 	{
 		isReady = oniGrabber.setup(cameraSettings);
@@ -37,7 +50,7 @@ void testApp::update(){
 void testApp::draw(){
 	if (isReady) 
 	{
-		//oniGrabber.draw();
+		oniGrabber.draw();
 		camera.begin();
 			ofScale(200, 200, 200);
 			glPointSize(3);

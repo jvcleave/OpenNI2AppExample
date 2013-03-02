@@ -39,10 +39,11 @@ ofxOpenNI2Grabber::Settings::Settings() {
 	doColor = true;
 	depthPixelFormat = PIXEL_FORMAT_DEPTH_100_UM;
 	colorPixelFormat = PIXEL_FORMAT_RGB888;
+	doRegisterDepthToColor = true;
 	isKinect = false;
 	doPointCloud = true;			// option for point cloud
 	doPointCloudColor = true;		// color point cloud
-	useOniFile = true;
+	useOniFile = false;
 	oniFilePath = "UNDEFINED";
 }
 
@@ -72,7 +73,7 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 			string deviceName = deviceInfoList[i].getName();
 			if (deviceName == "Kinect") 
 			{
-				//isKinect = true;
+				settings.isKinect = true;
 				ofLogVerbose() << "DEVICE IS KINECT";
 				
 			}
@@ -100,7 +101,8 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	}else 
 	{
 		ofLog(OF_LOG_VERBOSE, "Device open FAIL:\n%s\n", OpenNI::getExtendedError());
-		close();
+		device.close();
+		return false;
 	}
 	
 	ofxOpenNI2GrabberUtils::printModes(device);
@@ -108,13 +110,6 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	if (settings.doDepth) 
 	{
 		status = depth.create(device, SENSOR_DEPTH);
-		const VideoMode* requestedMode = findMode(device, SENSOR_DEPTH); 
-		if (requestedMode != NULL) 
-		{
-			depth.setVideoMode(*requestedMode);
-		}
-		
-		
 		if (status == STATUS_OK)
 		{
 			ofLogVerbose() << "Find depth stream PASS";
@@ -134,6 +129,14 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 			ofLog(OF_LOG_VERBOSE,"Find depth stream FAIL:\n%s\n", OpenNI::getExtendedError());
 		}
 		
+		if(!settings.useOniFile && !settings.isKinect)
+		{
+			const VideoMode* requestedMode = findMode(device, SENSOR_DEPTH); 
+			if (requestedMode != NULL) 
+			{
+				depth.setVideoMode(*requestedMode);
+			}
+		}
 		if (depth.isValid())
 		{
 			ofLogVerbose() << "DEPTH streams VALID";
@@ -154,11 +157,6 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	if (settings.doColor) 
 	{
 		status = color.create(device, SENSOR_COLOR);
-		const VideoMode* requestedColorMode = findMode(device, SENSOR_COLOR); 
-		if (requestedColorMode != NULL) 
-		{
-			color.setVideoMode(*requestedColorMode);
-		}
 		if (status == STATUS_OK)
 		{
 			ofLogVerbose() << "Find color stream PASS";
@@ -177,6 +175,14 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 			ofLog(OF_LOG_VERBOSE,"Find color stream FAIL:\n%s\n", OpenNI::getExtendedError());
 		}
 		
+		if(!settings.useOniFile && !settings.isKinect)
+		{
+			const VideoMode* requestedColorMode = findMode(device, SENSOR_COLOR); 
+			if (requestedColorMode != NULL) 
+			{
+				color.setVideoMode(*requestedColorMode);
+			}
+		}
 		if (color.isValid())
 		{
 			allocateColorBuffers();
@@ -188,7 +194,24 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 			return false;
 		}
 	}
+	if(settings.doRegisterDepthToColor)
+	{
+		if (device.isImageRegistrationModeSupported(IMAGE_REGISTRATION_DEPTH_TO_COLOR)) 
+		{
+			status = device.setImageRegistrationMode(IMAGE_REGISTRATION_DEPTH_TO_COLOR);
+			if (status == STATUS_OK)
+			{
+				ofLogVerbose() << "IMAGE_REGISTRATION_DEPTH_TO_COLOR PASS";
+			}else
+			{
+				ofLog(OF_LOG_ERROR,"IMAGE_REGISTRATION_DEPTH_TO_COLOR FAIL:\n%s\n", OpenNI::getExtendedError());
+			}
+		}else 
+		{
+			ofLogError() << "Device does not support IMAGE_REGISTRATION_DEPTH_TO_COLOR";
+		}
 
+	}
 	streams.resize(2);
 	streams[0] = &depth;
 	streams[1] = &color;
@@ -312,7 +335,7 @@ ofMesh & ofxOpenNI2Grabber::getPointCloud(){
 
 void ofxOpenNI2Grabber::generateDepthPixels()
 {
-	lock();
+	//lock();
 	depth.readFrame(&depthFrame);
 	const DepthPixel* oniDepthPixels = (const DepthPixel*)depthFrame.getData();
 	
@@ -323,7 +346,7 @@ void ofxOpenNI2Grabber::generateDepthPixels()
 	}
 	if (settings.doPointCloud)
 	{
-			const DepthPixel* pcDepthPixels = (const DepthPixel*)depthFrame.getData();
+			const DepthPixel* pcDepthPixels = oniDepthPixels;
 			for (unsigned short y = 0; y < depthHeight; y++) 
 			{
 				ofVec3f* point = &pointCloud.getVertices()[0] + y * depthWidth;
@@ -331,6 +354,7 @@ void ofxOpenNI2Grabber::generateDepthPixels()
 				for (unsigned short x = 0; x < depthWidth; x++, pcDepthPixels++, point++) 
 				{
 					point->z = (*pcDepthPixels)/deviceMaxDepth;
+					point->z*=5.0f;
 				}
 			}
 			if(settings.doPointCloudColor)
@@ -427,7 +451,40 @@ const VideoMode* ofxOpenNI2Grabber::findMode(Device& device, SensorType sensorTy
 	return mode;
 	
 }
-
+void ofxOpenNI2Grabber::calculateHistogram(float* pHistogram, int histogramSize, const VideoFrameRef& frame)
+{
+	const DepthPixel* pDepth = (const DepthPixel*)frame.getData();
+	// Calculate the accumulative histogram (the yellow display...)
+	memset(pHistogram, 0, histogramSize*sizeof(float));
+	int restOfRow = frame.getStrideInBytes() / sizeof(DepthPixel) - frame.getWidth();
+	int height = frame.getHeight();
+	int width = frame.getWidth();
+	
+	unsigned int nNumberOfPoints = 0;
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x, ++pDepth)
+		{
+			if (*pDepth != 0)
+			{
+				pHistogram[*pDepth]++;
+				nNumberOfPoints++;
+			}
+		}
+		pDepth += restOfRow;
+	}
+	for (int nIndex=1; nIndex<histogramSize; nIndex++)
+	{
+		pHistogram[nIndex] += pHistogram[nIndex-1];
+	}
+	if (nNumberOfPoints)
+	{
+		for (int nIndex=1; nIndex<histogramSize; nIndex++)
+		{
+			pHistogram[nIndex] = (256 * (1.0f - (pHistogram[nIndex] / nNumberOfPoints)));
+		}
+	}
+}
 bool ofxOpenNI2Grabber::close()
 {
 	isReady = false;
