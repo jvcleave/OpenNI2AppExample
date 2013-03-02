@@ -11,25 +11,6 @@
 
 
 
-void ofxOpenNI2Grabber::onDeviceStateChanged(const DeviceInfo* deviceInfo, DeviceState state )
-{
-	//lock();
-	ofLogVerbose() << "ofxOpenNI2Grabber::onDeviceStateChanged";
-
-}
-void ofxOpenNI2Grabber::onDeviceConnected(const DeviceInfo*)
-{
-	//lock();
-	ofLogVerbose() << "ofxOpenNI2Grabber::onDeviceConnected";
-}
-
-void ofxOpenNI2Grabber::onDeviceDisconnected(const DeviceInfo*)
-{
-	//lock();
-	ofLogVerbose() << "ofxOpenNI2Grabber::onDeviceDisconnected";
-}
-
-
 ofxOpenNI2Grabber::Settings::Settings() {
 	width = 640;
 	height = 480;
@@ -61,9 +42,7 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	if (status == STATUS_OK)
 	{
 		ofLogVerbose() << "initialize PASS";
-		OpenNI::addDeviceStateChangedListener(this);
-		OpenNI::addDeviceConnectedListener(this);
-		OpenNI::addDeviceDisconnectedListener(this);
+	
 		Array<DeviceInfo> deviceInfoList;
 		OpenNI::enumerateDevices(&deviceInfoList);
 		for (int i=0; i<deviceInfoList.getSize(); i++) 
@@ -145,7 +124,11 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 			{
 				allocateDepthRawBuffers();
 			}
-			
+			/*status = depth.addNewFrameListener(this);
+			if (status == STATUS_OK)
+			{
+				ofLogVerbose() << "DEPTH Add onNewFrameListener PASS";
+			}*/
 		}else 
 		{
 			ofLogVerbose() << "DEPTH streams INVALID";
@@ -187,6 +170,14 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 		{
 			allocateColorBuffers();
 			ofLogVerbose() << "COLOR stream VALID";
+			/*status = color.addNewFrameListener(this);
+			if (status == STATUS_OK)
+			{
+				ofLogVerbose() << "COLOR Add onNewFrameListener PASS";
+			}else {
+				ofLogError() << "COLOR Add onNewFrameListener FAIL" << OpenNI::getExtendedError();
+			}*/
+
 		}else 
 		{
 			ofLogVerbose() << "COLOR stream INVALID";

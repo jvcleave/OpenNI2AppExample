@@ -13,10 +13,7 @@
 using namespace openni;
 
 class ofxOpenNI2Grabber: 
-public ofThread, 
-public OpenNI::DeviceStateChangedListener,
-public OpenNI::DeviceConnectedListener,
-public OpenNI::DeviceDisconnectedListener
+public ofThread
 {
 public:
 	struct Settings;
@@ -90,14 +87,6 @@ public:
 	};
 	Settings 			settings;
 	
-	//OpenNI::DeviceStateChangedListener callback
-	void onDeviceStateChanged(const DeviceInfo*, DeviceState);
-	
-	//OpenNI::DeviceConnectedListener callback
-	void onDeviceConnected(const DeviceInfo*);
-	
-	//OpenNI::DeviceDisconnectedListener callback
-	void onDeviceDisconnected(const DeviceInfo*);
 	ofMesh pointCloud;
 	bool isPointCloudValid;
 	ofMesh & getPointCloud();
