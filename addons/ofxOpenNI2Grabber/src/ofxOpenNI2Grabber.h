@@ -9,7 +9,14 @@
 #include "ofMain.h"
 #include "OpenNI.h"
 #include "ofxOpenNI2GrabberUtils.h"
+#include "RGBSource.h"
+#include "DepthSource.h"
 
+/*
+ OpenNI::addDeviceStateChangedListener(this);
+ OpenNI::addDeviceConnectedListener(this);
+ OpenNI::addDeviceDisconnectedListener(this);
+ */
 using namespace openni;
 
 class ofxOpenNI2Grabber: 
@@ -25,36 +32,15 @@ public:
 	bool close();
 	
 	Device device;
+	RGBSource rgbSource;
+	DepthSource depthSource;
 	const char* deviceURI;
 
-	VideoStream depth;
-	VideoMode depthVideoMode;
-	VideoFrameRef depthFrame;
-	int depthWidth;
-	int depthHeight;
-	
-	VideoStream color;
-	VideoMode colorVideoMode;
-	VideoFrameRef colorFrame;
-	int colorWidth;
-	int colorHeight;
+
 	vector<VideoStream*> streams;
-	//VideoStream**		streams;
-	ofTexture depthTexture;
-	ofPixels depthPixels[2];
-	ofPixels* backDepthPixels;
-	ofPixels* currentDepthPixels;
+
 	
-	// depth raw
-	ofShortPixels depthRawPixels[2];
-	ofShortPixels* backDepthRawPixels;
-	ofShortPixels* currentDepthRawPixels;
-	
-	// rgb
-	ofTexture rgbTexture;
-	ofPixels rgbPixels[2];
-	ofPixels* backRGBPixels;
-	ofPixels* currentRGBPixels;
+
 	
 	void generateDepthPixels();
 	bool isReady;
@@ -62,11 +48,8 @@ public:
 	float	deviceMaxDepth;
 	
 	bool isKinect;
-	void calculateHistogram(float* pHistogram, int histogramSize, const VideoFrameRef& frame);
 
 	const VideoMode* findMode(Device& device, SensorType sensorType);
-	void allocateDepthBuffers();
-	void allocateDepthRawBuffers();
 	void allocateColorBuffers();
 	struct Settings {
 		int		width;					// camera width
@@ -87,9 +70,9 @@ public:
 	};
 	Settings 			settings;
 	
-	ofMesh pointCloud;
+	/*ofMesh pointCloud;
 	bool isPointCloudValid;
-	ofMesh & getPointCloud();
+	ofMesh & getPointCloud();*/
 protected:
 	void threadedFunction();
 	

@@ -7,7 +7,7 @@ void testApp::setup(){
 	int maxAttempts = 3;
 	int attemptCounter = 0;
 	ofxOpenNI2Grabber::Settings cameraSettings;
-	
+	cameraSettings.doColor = false;
 	
 	ofDirectory currentONIDirectory(ofToDataPath("current", true));
 	if (currentONIDirectory.exists()) 
@@ -36,8 +36,8 @@ void testApp::setup(){
 	}
 	ofLogVerbose() << "started";
 	oniGrabber.startThread(false, false);
-	camera.setupPerspective(true, 40, 0, -100000);
-	camera.setup();
+	//camera.setupPerspective(true, 40, 0, -100000);
+	//camera.setup();
 }
 bool hasSetPos = false;
 //--------------------------------------------------------------
@@ -51,12 +51,12 @@ void testApp::draw(){
 	if (isReady) 
 	{
 		oniGrabber.draw();
-		camera.begin();
+		/*camera.begin();
 			ofScale(200, 200, 200);
 			glPointSize(3);
 			oniGrabber.getPointCloud().draw();
 			//oniGrabber.getPointCloud().drawWireframe();
-		camera.end();
+		camera.end();*/
 	}
 	
 }
