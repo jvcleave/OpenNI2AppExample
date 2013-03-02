@@ -11,25 +11,6 @@
 
 
 
-void ofxOpenNI2Grabber::onDeviceStateChanged(const DeviceInfo* deviceInfo, DeviceState state )
-{
-	//lock();
-	ofLogVerbose() << "ofxOpenNI2Grabber::onDeviceStateChanged";
-
-}
-void ofxOpenNI2Grabber::onDeviceConnected(const DeviceInfo*)
-{
-	//lock();
-	ofLogVerbose() << "ofxOpenNI2Grabber::onDeviceConnected";
-}
-
-void ofxOpenNI2Grabber::onDeviceDisconnected(const DeviceInfo*)
-{
-	//lock();
-	ofLogVerbose() << "ofxOpenNI2Grabber::onDeviceDisconnected";
-}
-
-
 ofxOpenNI2Grabber::Settings::Settings() {
 	width = 640;
 	height = 480;
@@ -37,7 +18,7 @@ ofxOpenNI2Grabber::Settings::Settings() {
 	doDepth = true;
 	doRawDepth = true;
 	doColor = true;
-	depthPixelFormat = PIXEL_FORMAT_DEPTH_100_UM;
+	depthPixelFormat = PIXEL_FORMAT_DEPTH_1_MM;
 	colorPixelFormat = PIXEL_FORMAT_RGB888;
 	doRegisterDepthToColor = true;
 	isKinect = false;
@@ -61,9 +42,7 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	if (status == STATUS_OK)
 	{
 		ofLogVerbose() << "initialize PASS";
-		OpenNI::addDeviceStateChangedListener(this);
-		OpenNI::addDeviceConnectedListener(this);
-		OpenNI::addDeviceDisconnectedListener(this);
+	
 		Array<DeviceInfo> deviceInfoList;
 		OpenNI::enumerateDevices(&deviceInfoList);
 		for (int i=0; i<deviceInfoList.getSize(); i++) 
@@ -86,7 +65,8 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	{
 		ofLog(OF_LOG_ERROR, "initialize FAIL:\n%s\n", OpenNI::getExtendedError());
 	}
-	if (settings.useOniFile) {
+	if (settings.useOniFile) 
+	{
 		status = device.open(settings.oniFilePath.c_str());
 	}else 
 	{
@@ -100,7 +80,7 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 		ofxOpenNI2GrabberUtils::printDeviceInfo(device);
 	}else 
 	{
-		ofLog(OF_LOG_VERBOSE, "Device open FAIL:\n%s\n", OpenNI::getExtendedError());
+		ofLogError() << "Device open FAIL: " << OpenNI::getExtendedError();
 		device.close();
 		return false;
 	}
@@ -109,90 +89,23 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 
 	if (settings.doDepth) 
 	{
-		status = depth.create(device, SENSOR_DEPTH);
-		if (status == STATUS_OK)
-		{
-			ofLogVerbose() << "Find depth stream PASS";
-			
-			status = depth.start();
-			if (status == STATUS_OK)
-			{
-				ofLogVerbose() << "Start depth stream PASS";
-			}else 
-			{
-				ofLog(OF_LOG_VERBOSE,"Start depth stream FAIL:\n%s\n", OpenNI::getExtendedError());
-				depth.destroy();
-			}
-			
-		}else
-		{
-			ofLog(OF_LOG_VERBOSE,"Find depth stream FAIL:\n%s\n", OpenNI::getExtendedError());
-		}
 		
-		if(!settings.useOniFile && !settings.isKinect)
+		depthSource.setup(device);
+		streams.push_back(&depthSource.videoStream);
+		/*if(!settings.useOniFile && !settings.isKinect)
 		{
 			const VideoMode* requestedMode = findMode(device, SENSOR_DEPTH); 
 			if (requestedMode != NULL) 
 			{
 				depth.setVideoMode(*requestedMode);
 			}
-		}
-		if (depth.isValid())
-		{
-			ofLogVerbose() << "DEPTH streams VALID";
-			allocateDepthBuffers();
-			if (settings.doRawDepth) 
-			{
-				allocateDepthRawBuffers();
-			}
-			
-		}else 
-		{
-			ofLogVerbose() << "DEPTH streams INVALID";
-			device.close();
-			return false;
-		}
+		}*/
+		
 	}
-	
 	if (settings.doColor) 
 	{
-		status = color.create(device, SENSOR_COLOR);
-		if (status == STATUS_OK)
-		{
-			ofLogVerbose() << "Find color stream PASS";
-			status = color.start();
-			if (status == STATUS_OK)
-			{
-				ofLogVerbose() << "Start color stream PASS";
-			}else 
-			{
-				
-				ofLog(OF_LOG_VERBOSE,"Start color stream FAIL:\n%s\n", OpenNI::getExtendedError());
-				color.destroy();
-			}
-		}else
-		{
-			ofLog(OF_LOG_VERBOSE,"Find color stream FAIL:\n%s\n", OpenNI::getExtendedError());
-		}
-		
-		if(!settings.useOniFile && !settings.isKinect)
-		{
-			const VideoMode* requestedColorMode = findMode(device, SENSOR_COLOR); 
-			if (requestedColorMode != NULL) 
-			{
-				color.setVideoMode(*requestedColorMode);
-			}
-		}
-		if (color.isValid())
-		{
-			allocateColorBuffers();
-			ofLogVerbose() << "COLOR stream VALID";
-		}else 
-		{
-			ofLogVerbose() << "COLOR stream INVALID";
-			device.close();
-			return false;
-		}
+		rgbSource.setup(device);
+		streams.push_back(&rgbSource.videoStream);
 	}
 	if(settings.doRegisterDepthToColor)
 	{
@@ -204,7 +117,7 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 				ofLogVerbose() << "IMAGE_REGISTRATION_DEPTH_TO_COLOR PASS";
 			}else
 			{
-				ofLog(OF_LOG_ERROR,"IMAGE_REGISTRATION_DEPTH_TO_COLOR FAIL:\n%s\n", OpenNI::getExtendedError());
+				ofLogError() << "IMAGE_REGISTRATION_DEPTH_TO_COLOR FAIL:" << OpenNI::getExtendedError();
 			}
 		}else 
 		{
@@ -212,198 +125,36 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 		}
 
 	}
-	streams.resize(2);
-	streams[0] = &depth;
-	streams[1] = &color;
 	
 	isReady = true;
 	return isReady;
 }
-void ofxOpenNI2Grabber::allocateDepthBuffers()
-{
-	depthVideoMode = depth.getVideoMode();
-	depthWidth = depthVideoMode.getResolutionX();
-	depthHeight = depthVideoMode.getResolutionY();
-	deviceMaxDepth	= depth.getMaxPixelValue();
-	
-	ofLogVerbose() << "deviceMaxDepth: " << deviceMaxDepth;
-	
-	depthPixels[0].allocate(depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
-	depthPixels[1].allocate(depthWidth, depthHeight, OF_IMAGE_COLOR_ALPHA);
-	currentDepthPixels = &depthPixels[0];
-	backDepthPixels = &depthPixels[1];
-	
-	depthTexture.allocate(depthWidth, depthHeight, GL_RGBA);
-	
-	if (settings.doPointCloud) 
-	{
-		pointCloud.setMode(OF_PRIMITIVE_POINTS);
-		pointCloud.getVertices().resize(depthWidth*depthHeight);
-		pointCloud.getColors().resize(depthWidth*depthHeight);
-		int i=0;
-		for(int y=0; y<depthHeight; y++)
-		{
-			for(int x=0; x<depthWidth; x++)
-			{
-				pointCloud.getVertices()[i].set(float(x)/depthWidth, float(y)/depthHeight, 0);
-				i++;
-			}
-		}
-		
-	}
 
-}
 
-void ofxOpenNI2Grabber::allocateDepthRawBuffers()
-{
-	depthRawPixels[0].allocate(depthWidth, depthHeight, OF_PIXELS_MONO);
-	depthRawPixels[1].allocate(depthWidth, depthHeight, OF_PIXELS_MONO);
-	currentDepthRawPixels = &depthRawPixels[0];
-	backDepthRawPixels = &depthRawPixels[1];
-}
 
-void ofxOpenNI2Grabber::allocateColorBuffers()
-{
-	colorVideoMode = color.getVideoMode();
-	colorWidth = colorVideoMode.getResolutionX();
-	colorHeight = colorVideoMode.getResolutionY();
-	
-	rgbPixels[0].allocate(colorWidth, colorHeight, OF_IMAGE_COLOR);
-	rgbPixels[1].allocate(colorWidth, colorHeight, OF_IMAGE_COLOR);
-	currentRGBPixels = &rgbPixels[0];
-	backRGBPixels = &rgbPixels[1];
-	
-	rgbTexture.allocate(colorWidth, colorHeight, GL_RGB);
-}
 
 void ofxOpenNI2Grabber::threadedFunction()
 {
 	while (isThreadRunning()) 
 	{
-		readFrame();
+		int changedIndex;
+		Status status = OpenNI::waitForAnyStream(&streams[0], streams.size(), &changedIndex);
+		if (status != STATUS_OK)
+		{
+			ofLogError() << "waitForAnyStream FAIL:" << OpenNI::getExtendedError();
+		}
 	}
 }
-
-void ofxOpenNI2Grabber::readFrame()
-{
-	int changedIndex;
-	Status rc = OpenNI::waitForAnyStream(&streams[0], streams.size(), &changedIndex);
-	if (rc != STATUS_OK)
-	{
-		ofLogError() << "Wait failed";
-		return;
-	}
-	lock();
-	switch (changedIndex)
-	{
-		case 0:
-		{
-			generateDepthPixels();
-			break;
-		}
-		case 1:
-		{
-			color.readFrame(&colorFrame);
-			backRGBPixels->setFromPixels((unsigned char *)colorFrame.getData(), colorWidth, colorHeight, OF_IMAGE_COLOR);
-			swap(backRGBPixels,currentRGBPixels);
-			break;
-		}
-		default:
-		{
-			ofLogError() << "Error in wait";
-		}
-	}
-	unlock();
-}
-
 
 void ofxOpenNI2Grabber::draw()
 {
-	//lock();
-	depthTexture.loadData(*currentDepthPixels);
-	rgbTexture.loadData(*currentRGBPixels);
-	
-	rgbTexture.draw(0, 0);
-	depthTexture.draw(settings.width, 0);
-
-}
-ofMesh & ofxOpenNI2Grabber::getPointCloud(){
-	//lock();
-	return pointCloud;
+	if (settings.doColor) rgbSource.draw();
+	if (settings.doColor) depthSource.draw();
 }
 
 
-void ofxOpenNI2Grabber::generateDepthPixels()
-{
-	//lock();
-	depth.readFrame(&depthFrame);
-	const DepthPixel* oniDepthPixels = (const DepthPixel*)depthFrame.getData();
-	
-	if (settings.doRawDepth) 
-	{
-		backDepthRawPixels->setFromPixels(oniDepthPixels, depthWidth, depthHeight, 1);
-		swap(backDepthRawPixels,currentDepthRawPixels);
-	}
-	if (settings.doPointCloud)
-	{
-			const DepthPixel* pcDepthPixels = oniDepthPixels;
-			for (unsigned short y = 0; y < depthHeight; y++) 
-			{
-				ofVec3f* point = &pointCloud.getVertices()[0] + y * depthWidth;
-		
-				for (unsigned short x = 0; x < depthWidth; x++, pcDepthPixels++, point++) 
-				{
-					point->z = (*pcDepthPixels)/deviceMaxDepth;
-					point->z*=5.0f;
-				}
-			}
-			if(settings.doPointCloudColor)
-			{
-				unsigned char * rgbColorPtr = currentRGBPixels->getPixels();
-				for(int i=0;i<(int)pointCloud.getColors().size();i++)
-				{
-					pointCloud.getColors()[i] = ofColor(*rgbColorPtr, *(rgbColorPtr+1), *(rgbColorPtr+2));
-					rgbColorPtr+=3;
-				}
-			}
-			
-		
-	}
-	float max = 255;
-	for (unsigned short y = 0; y < depthHeight; y++) 
-	{
-		unsigned char * texture = backDepthPixels->getPixels() + y * depthWidth * 4;
-		for (unsigned short  x = 0; x < depthWidth; x++, oniDepthPixels++, texture += 4)
-		{
-			unsigned char red = 0;
-			unsigned char green = 0;
-			unsigned char blue = 0;
-			unsigned char alpha = 255;
-			
-			unsigned short col_index;
-			
-			unsigned char a = (unsigned char)(((*oniDepthPixels) / ( deviceMaxDepth / max)));
-			red		= a;
-			green	= a;
-			blue	= a;
-			
-			texture[0] = red;
-			texture[1] = green;
-			texture[2] = blue;
-			
-			if (*oniDepthPixels == 0)
-			{
-				texture[3] = 0;
-			} else	
-			{
-				texture[3] = alpha;
-			}
-		}
-	}
-	swap(backDepthPixels,currentDepthPixels);
-	
-	
-}
+
+
 
 //The Kinect/freenect driver does not find anything, The Xtion Pro has options
 const VideoMode* ofxOpenNI2Grabber::findMode(Device& device, SensorType sensorType)
@@ -449,51 +200,14 @@ const VideoMode* ofxOpenNI2Grabber::findMode(Device& device, SensorType sensorTy
 		}
 	}
 	return mode;
-	
-}
-void ofxOpenNI2Grabber::calculateHistogram(float* pHistogram, int histogramSize, const VideoFrameRef& frame)
-{
-	const DepthPixel* pDepth = (const DepthPixel*)frame.getData();
-	// Calculate the accumulative histogram (the yellow display...)
-	memset(pHistogram, 0, histogramSize*sizeof(float));
-	int restOfRow = frame.getStrideInBytes() / sizeof(DepthPixel) - frame.getWidth();
-	int height = frame.getHeight();
-	int width = frame.getWidth();
-	
-	unsigned int nNumberOfPoints = 0;
-	for (int y = 0; y < height; ++y)
-	{
-		for (int x = 0; x < width; ++x, ++pDepth)
-		{
-			if (*pDepth != 0)
-			{
-				pHistogram[*pDepth]++;
-				nNumberOfPoints++;
-			}
-		}
-		pDepth += restOfRow;
-	}
-	for (int nIndex=1; nIndex<histogramSize; nIndex++)
-	{
-		pHistogram[nIndex] += pHistogram[nIndex-1];
-	}
-	if (nNumberOfPoints)
-	{
-		for (int nIndex=1; nIndex<histogramSize; nIndex++)
-		{
-			pHistogram[nIndex] = (256 * (1.0f - (pHistogram[nIndex] / nNumberOfPoints)));
-		}
-	}
 }
 bool ofxOpenNI2Grabber::close()
 {
 	isReady = false;
 	stopThread();
 	
-	depth.stop();
-	color.stop();
-	depth.destroy();
-	color.destroy();
+	depthSource.close();
+	rgbSource.close();
 	device.close();
 	
 	OpenNI::shutdown();
