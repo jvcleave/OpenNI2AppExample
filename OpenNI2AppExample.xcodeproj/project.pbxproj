@@ -19,6 +19,7 @@
 		03CB27DC16E15CDD00892016 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB27D616E15CDD00892016 /* ofxXmlSettings.cpp */; };
 		03CB28A916E2894900892016 /* RGBSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB28A816E2894900892016 /* RGBSource.cpp */; };
 		03CB28AE16E28E7500892016 /* DepthSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB28AD16E28E7500892016 /* DepthSource.cpp */; };
+		03CB297916E2AE3B00892016 /* DeviceController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB297816E2AE3B00892016 /* DeviceController.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -98,7 +99,6 @@
 		03CB255916E055BC00892016 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNI.h; sourceTree = "<group>"; };
 		03CB255A16E055BC00892016 /* PS1080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PS1080.h; sourceTree = "<group>"; };
 		03CB255C16E055BC00892016 /* OniPlatformWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatformWin32.h; sourceTree = "<group>"; };
-		03CB269516E080BD00892016 /* ofxOpenNI2GrabberUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2GrabberUtils.h; sourceTree = "<group>"; };
 		03CB27CD16E15CDD00892016 /* ofxGameCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGameCamera.cpp; sourceTree = "<group>"; };
 		03CB27CE16E15CDD00892016 /* ofxGameCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGameCamera.h; sourceTree = "<group>"; };
 		03CB27D116E15CDD00892016 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
@@ -111,6 +111,9 @@
 		03CB28A816E2894900892016 /* RGBSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBSource.cpp; sourceTree = "<group>"; };
 		03CB28AC16E28E7500892016 /* DepthSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthSource.h; sourceTree = "<group>"; };
 		03CB28AD16E28E7500892016 /* DepthSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DepthSource.cpp; sourceTree = "<group>"; };
+		03CB297716E2AE3B00892016 /* DeviceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceController.h; sourceTree = "<group>"; };
+		03CB297816E2AE3B00892016 /* DeviceController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceController.cpp; sourceTree = "<group>"; };
+		03CB298316E2B69E00892016 /* ofxOpenNI2GrabberSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2GrabberSettings.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -187,11 +190,13 @@
 				03CB233D16DF2B6F00892016 /* Viewer.h */,
 				03CB233116DF25AE00892016 /* ofxOpenNI2Grabber.h */,
 				03CB233216DF25AE00892016 /* ofxOpenNI2Grabber.cpp */,
-				03CB269516E080BD00892016 /* ofxOpenNI2GrabberUtils.h */,
 				03CB28A716E2894900892016 /* RGBSource.h */,
 				03CB28A816E2894900892016 /* RGBSource.cpp */,
 				03CB28AC16E28E7500892016 /* DepthSource.h */,
 				03CB28AD16E28E7500892016 /* DepthSource.cpp */,
+				03CB297716E2AE3B00892016 /* DeviceController.h */,
+				03CB297816E2AE3B00892016 /* DeviceController.cpp */,
+				03CB298316E2B69E00892016 /* ofxOpenNI2GrabberSettings.h */,
 			);
 			name = src;
 			path = addons/ofxOpenNI2Grabber/src;
@@ -538,6 +543,7 @@
 				03CB27DC16E15CDD00892016 /* ofxXmlSettings.cpp in Sources */,
 				03CB28A916E2894900892016 /* RGBSource.cpp in Sources */,
 				03CB28AE16E28E7500892016 /* DepthSource.cpp in Sources */,
+				03CB297916E2AE3B00892016 /* DeviceController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
