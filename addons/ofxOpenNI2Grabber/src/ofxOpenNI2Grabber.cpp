@@ -42,6 +42,8 @@ ofxOpenNI2Grabber::Settings::Settings() {
 	isKinect = false;
 	doPointCloud = true;			// option for point cloud
 	doPointCloudColor = true;		// color point cloud
+	useOniFile = true;
+	oniFilePath = "UNDEFINED";
 }
 
 ofxOpenNI2Grabber::ofxOpenNI2Grabber()
@@ -83,13 +85,17 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 	{
 		ofLog(OF_LOG_ERROR, "initialize FAIL:\n%s\n", OpenNI::getExtendedError());
 	}
+	if (settings.useOniFile) {
+		status = device.open(settings.oniFilePath.c_str());
+	}else 
+	{
+		device.open(ANY_DEVICE);
+	}
 	
-	deviceURI = ANY_DEVICE;
-	status = device.open(deviceURI);
 
 	if (status == STATUS_OK)
 	{
-		ofLogVerbose() << "Device open PASS" <<  deviceURI;
+		ofLogVerbose() << "Device open PASS";
 		ofxOpenNI2GrabberUtils::printDeviceInfo(device);
 	}else 
 	{
@@ -212,12 +218,11 @@ void ofxOpenNI2Grabber::allocateDepthBuffers()
 		pointCloud.getVertices().resize(depthWidth*depthHeight);
 		pointCloud.getColors().resize(depthWidth*depthHeight);
 		int i=0;
-		for(int y=0;y<settings.width;y++)
+		for(int y=0; y<depthHeight; y++)
 		{
-			for(int x=0;x<settings.height;x++)
+			for(int x=0; x<depthWidth; x++)
 			{
-				pointCloud.getVertices()[i].set(float(x)/640.f,float(y)/480.f, 0);
-				pointCloud.getColors()[i].set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+				pointCloud.getVertices()[i].set(float(x)/depthWidth, float(y)/depthHeight, 0);
 				i++;
 			}
 		}
@@ -307,6 +312,7 @@ ofMesh & ofxOpenNI2Grabber::getPointCloud(){
 
 void ofxOpenNI2Grabber::generateDepthPixels()
 {
+	lock();
 	depth.readFrame(&depthFrame);
 	const DepthPixel* oniDepthPixels = (const DepthPixel*)depthFrame.getData();
 	
@@ -315,19 +321,16 @@ void ofxOpenNI2Grabber::generateDepthPixels()
 		backDepthRawPixels->setFromPixels(oniDepthPixels, depthWidth, depthHeight, 1);
 		swap(backDepthRawPixels,currentDepthRawPixels);
 	}
-	/*if (settings.doPointCloud)
+	if (settings.doPointCloud)
 	{
-		if (oniDepthPixels == NULL) {
-			ofLogVerbose() << "DEPTH IS NULL" << endl;
-		}else 
-		{
-			mutex.lock();
+			const DepthPixel* pcDepthPixels = (const DepthPixel*)depthFrame.getData();
 			for (unsigned short y = 0; y < depthHeight; y++) 
 			{
-				ofVec3f * point = &pointCloud.getVertices()[0] + y * depthWidth;
-				for (unsigned short x = 0; x < depthWidth; x++, oniDepthPixels++, point++) 
+				ofVec3f* point = &pointCloud.getVertices()[0] + y * depthWidth;
+		
+				for (unsigned short x = 0; x < depthWidth; x++, pcDepthPixels++, point++) 
 				{
-					point->z = (*oniDepthPixels)/deviceMaxDepth;;
+					point->z = (*pcDepthPixels)/deviceMaxDepth;
 				}
 			}
 			if(settings.doPointCloudColor)
@@ -339,9 +342,9 @@ void ofxOpenNI2Grabber::generateDepthPixels()
 					rgbColorPtr+=3;
 				}
 			}
-			mutex.unlock();
-		}
-	}*/
+			
+		
+	}
 	float max = 255;
 	for (unsigned short y = 0; y < depthHeight; y++) 
 	{
