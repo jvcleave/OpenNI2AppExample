@@ -7,7 +7,7 @@ void testApp::setup(){
 	int maxAttempts = 3;
 	int attemptCounter = 0;
 	ofxOpenNI2Grabber::Settings cameraSettings;
-	cameraSettings.doColor = false;
+	//cameraSettings.doColor = false;
 	
 	ofDirectory currentONIDirectory(ofToDataPath("current", true));
 	if (currentONIDirectory.exists()) 

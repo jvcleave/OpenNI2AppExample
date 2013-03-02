@@ -13,7 +13,7 @@ bool DepthSource::setup(Device& device)
 	bool isReady = false;
 	Status status = STATUS_OK;
 	
-	status = videoStream.create(device, SENSOR_COLOR);
+	status = videoStream.create(device, SENSOR_DEPTH);
 	if (status == STATUS_OK)
 	{
 		ofLogVerbose() << "Find DepthSource stream PASS";
@@ -89,8 +89,8 @@ void DepthSource::onNewFrame(VideoStream& stream)
 	}
 	const DepthPixel* oniDepthPixels = (const DepthPixel*)videoFrameRef.getData();
 	
-	//backRawPixels->setFromPixels(oniDepthPixels, width, height, 1);
-	//swap(backRawPixels,currentRawPixels);
+	backRawPixels->setFromPixels(oniDepthPixels, width, height, 1);
+	swap(backRawPixels,currentRawPixels);
 	
 	float max = 255;
 	for (unsigned short y = 0; y < height; y++) 
@@ -123,7 +123,7 @@ void DepthSource::onNewFrame(VideoStream& stream)
 			}
 		}
 	}
-	//swap(backPixels,currentPixels);
+	swap(backPixels,currentPixels);
 	
 }
 

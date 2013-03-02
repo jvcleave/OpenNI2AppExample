@@ -18,7 +18,7 @@ ofxOpenNI2Grabber::Settings::Settings() {
 	doDepth = true;
 	doRawDepth = true;
 	doColor = true;
-	depthPixelFormat = PIXEL_FORMAT_DEPTH_100_UM;
+	depthPixelFormat = PIXEL_FORMAT_DEPTH_1_MM;
 	colorPixelFormat = PIXEL_FORMAT_RGB888;
 	doRegisterDepthToColor = true;
 	isKinect = false;
@@ -125,7 +125,6 @@ bool ofxOpenNI2Grabber::setup(Settings settings_)
 		}
 
 	}
-
 	
 	isReady = true;
 	return isReady;
@@ -139,20 +138,18 @@ void ofxOpenNI2Grabber::threadedFunction()
 	while (isThreadRunning()) 
 	{
 		int changedIndex;
-		Status rc = OpenNI::waitForAnyStream(&streams[0], streams.size(), &changedIndex);
+		Status status = OpenNI::waitForAnyStream(&streams[0], streams.size(), &changedIndex);
+		if (status != STATUS_OK)
+		{
+			ofLogError() << "waitForAnyStream FAIL:" << OpenNI::getExtendedError();
+		}
 	}
 }
 
-
-
-
 void ofxOpenNI2Grabber::draw()
 {
-	lock();
 	if (settings.doColor) rgbSource.draw();
-	depthSource.draw();
-	
-
+	if (settings.doColor) depthSource.draw();
 }
 
 
@@ -203,7 +200,6 @@ const VideoMode* ofxOpenNI2Grabber::findMode(Device& device, SensorType sensorTy
 		}
 	}
 	return mode;
-	
 }
 bool ofxOpenNI2Grabber::close()
 {

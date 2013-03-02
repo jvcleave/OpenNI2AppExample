@@ -31,7 +31,7 @@ public:
 	void allocateBuffers();
 	void draw();
 	void close();
-	float	deviceMaxDepth;
+	int	deviceMaxDepth;
 	void onNewFrame(VideoStream&);
 };
 
