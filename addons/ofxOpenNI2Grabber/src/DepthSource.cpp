@@ -8,12 +8,12 @@ DepthSource::DepthSource()
 	currentPixels = NULL;
 	deviceMaxDepth = 0;
 }
-bool DepthSource::setup(Device& device)
+bool DepthSource::setup(DeviceController& deviceController)
 {
 	bool isReady = false;
 	Status status = STATUS_OK;
 	
-	status = videoStream.create(device, SENSOR_DEPTH);
+	status = videoStream.create(deviceController.device, SENSOR_DEPTH);
 	if (status == STATUS_OK)
 	{
 		ofLogVerbose() << "Find DepthSource stream PASS";
@@ -33,8 +33,24 @@ bool DepthSource::setup(Device& device)
 	}
 	if (videoStream.isValid())
 	{
+		if(!deviceController.settings.useOniFile && !deviceController.isKinect)
+		{
+			const VideoMode* requestedMode = deviceController.findMode(SENSOR_DEPTH); 
+			if (requestedMode != NULL) 
+			{
+				videoStream.setVideoMode(*requestedMode);
+			}
+		}
 		allocateBuffers();
-		deviceMaxDepth	= videoStream.getMaxPixelValue();
+		
+		
+		if (!deviceController.isKinect)
+		{
+			deviceMaxDepth	= videoStream.getMaxPixelValue();
+		}else 
+		{
+			deviceMaxDepth = 10000;
+		}
 		ofLogVerbose() << "deviceMaxDepth: " << deviceMaxDepth;
 		status = videoStream.addNewFrameListener(this);
 		if (status == STATUS_OK)
@@ -45,6 +61,7 @@ bool DepthSource::setup(Device& device)
 			ofLogError() << "DepthSource videoStream addNewFrameListener FAIL: " <<  OpenNI::getExtendedError();
 		}
 
+		
 		
 		isReady = true;
 	}else 
@@ -81,7 +98,6 @@ void DepthSource::allocateBuffers()
 
 void DepthSource::onNewFrame(VideoStream& stream)
 {
-	//ofLogVerbose() << "DepthSource::onNewFrame";
 	Status status = stream.readFrame(&videoFrameRef);
 	if (status != STATUS_OK)
 	{
@@ -129,6 +145,8 @@ void DepthSource::onNewFrame(VideoStream& stream)
 
 void DepthSource::close()
 {
+	ofLogVerbose() << "DepthSource close";
 	videoStream.stop();
+	videoStream.removeNewFrameListener(this);
 	videoStream.destroy();
 }

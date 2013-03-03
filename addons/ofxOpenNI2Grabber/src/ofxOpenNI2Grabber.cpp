@@ -31,12 +31,9 @@ bool ofxOpenNI2Grabber::setup(ofxOpenNI2GrabberSettings settings_)
 		ofLog(OF_LOG_ERROR, "initialize FAIL:\n%s\n", OpenNI::getExtendedError());
 	}
 	
-	
-
 	if (status == STATUS_OK)
 	{
 		ofLogVerbose() << "Device open PASS";
-		
 	}else 
 	{
 		ofLogError() << "Device open FAIL: " << OpenNI::getExtendedError();
@@ -47,37 +44,36 @@ bool ofxOpenNI2Grabber::setup(ofxOpenNI2GrabberSettings settings_)
 	if (settings.doDepth) 
 	{
 		
-		depthSource.setup(deviceController.device);
-		streams.push_back(&depthSource.videoStream);
-		if(!settings.useOniFile && !deviceController.isKinect)
+		if (depthSource.setup(deviceController))
 		{
-			const VideoMode* requestedMode = deviceController.findMode(SENSOR_DEPTH); 
-			if (requestedMode != NULL) 
-			{
-				depthSource.videoStream.setVideoMode(*requestedMode);
-			}
+			streams.push_back(&depthSource.videoStream);
+		}else 
+		{
+			settings.doDepth = false;
+		}
+	}
+	
+	if (settings.doColor) 
+	{
+		if (rgbSource.setup(deviceController)) 
+		{
+			streams.push_back(&rgbSource.videoStream);
+		}else 
+		{
+			settings.doColor = false;
+		}
+	}
+	
+	if(settings.doRegisterDepthToColor)
+	{
+		if (settings.doDepth && settings.doColor)
+		{
+			deviceController.registerDepthToColor();
 		}
 		
 	}
-	if (settings.doColor) 
-	{
-		rgbSource.setup(deviceController.device);
-		streams.push_back(&rgbSource.videoStream);
-		if(!settings.useOniFile && !deviceController.isKinect)
-		{
-			const VideoMode* requestedMode = deviceController.findMode(SENSOR_COLOR); 
-			if (requestedMode != NULL) 
-			{
-				rgbSource.videoStream.setVideoMode(*requestedMode);
-			}
-		}
-	}
-	if(settings.doRegisterDepthToColor)
-	{
-		deviceController.registerDepthToColor();
-	}
-	
 	isReady = true;
+	startThread(false, false);
 	return isReady;
 }
 
@@ -96,13 +92,50 @@ void ofxOpenNI2Grabber::threadedFunction()
 
 void ofxOpenNI2Grabber::draw()
 {
+	//lock();
 	if (settings.doColor) rgbSource.draw();
-	if (settings.doColor) depthSource.draw();
+	if (settings.doDepth) depthSource.draw();
 }
+
+ofPixels & ofxOpenNI2Grabber::getDepthPixels()
+{
+	Poco::ScopedLock<ofMutex> lock(mutex);
+	return *depthSource.currentPixels;
+}
+
+ofShortPixels & ofxOpenNI2Grabber::getDepthRawPixels()
+{
+	Poco::ScopedLock<ofMutex> lock(mutex);
+	
+	if (!settings.doRawDepth)
+	{
+		ofLogError() << "settings.doRawPixels is FALSE";
+		
+	}
+	return *depthSource.currentRawPixels;
+}
+
+ofPixels & ofxOpenNI2Grabber::getRGBPixels()
+{
+	Poco::ScopedLock<ofMutex> lock(mutex);
+	return *rgbSource.currentPixels;
+}
+
+ofTexture & ofxOpenNI2Grabber::getDepthTextureReference()
+{
+	return depthSource.texture;
+}
+
+ofTexture & ofxOpenNI2Grabber::getRGBTextureReference()
+{
+	return rgbSource.texture;
+}
+
 
 
 bool ofxOpenNI2Grabber::close()
 {
+	ofLogVerbose() << "ofxOpenNI2Grabber::close";
 	isReady = false;
 	stopThread();
 	

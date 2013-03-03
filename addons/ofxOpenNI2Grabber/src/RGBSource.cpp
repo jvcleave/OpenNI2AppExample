@@ -16,12 +16,12 @@ RGBSource::RGBSource()
 	backPixels = NULL;
 	currentPixels = NULL;
 }
-bool RGBSource::setup(Device& device)
+bool RGBSource::setup(DeviceController& deviceController)
 {
 	bool isReady = false;
 	Status status = STATUS_OK;
 	
-	status = videoStream.create(device, SENSOR_COLOR);
+	status = videoStream.create(deviceController.device, SENSOR_COLOR);
 	if (status == STATUS_OK)
 	{
 		ofLogVerbose() << "Find RGBSource videoStream PASS";
@@ -38,14 +38,26 @@ bool RGBSource::setup(Device& device)
 	}else
 	{
 		ofLogError() << "Find RGBSource videoStream FAIL: "<< OpenNI::getExtendedError();
+		videoStream.destroy();
 	}
 	if (videoStream.isValid())
 	{
+		if(!deviceController.settings.useOniFile && !deviceController.isKinect)
+		{
+			const VideoMode* requestedMode = deviceController.findMode(SENSOR_COLOR); 
+			if (requestedMode != NULL) 
+			{
+				videoStream.setVideoMode(*requestedMode);
+			}
+		}
 		allocateBuffers();
 		status = videoStream.addNewFrameListener(this);
 		if (status == STATUS_OK)
 		{
 			ofLogVerbose() << "RGBSource videoStream addNewFrameListener PASS";
+		}else
+		{
+			ofLogVerbose() << "RGBSource videoStream addNewFrameListener FAIL" << OpenNI::getExtendedError() ;
 		}
 		
 		isReady = true;
@@ -53,10 +65,9 @@ bool RGBSource::setup(Device& device)
 	{
 		ofLogError() << "RGBSource is INVALID";
 	}
-
-	
 	return isReady;
 }
+
 void RGBSource::draw()
 {
 	texture.loadData(*currentPixels);
@@ -84,6 +95,8 @@ void RGBSource::onNewFrame(VideoStream& stream)
 }
 void RGBSource::close()
 {
+	ofLogVerbose() << "RGBSource close";
 	videoStream.stop();
+	videoStream.removeNewFrameListener(this);
 	videoStream.destroy();
 }

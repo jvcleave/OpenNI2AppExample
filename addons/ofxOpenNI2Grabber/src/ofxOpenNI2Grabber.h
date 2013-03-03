@@ -40,6 +40,14 @@ public:
 	/*ofMesh pointCloud;
 	bool isPointCloudValid;
 	ofMesh & getPointCloud();*/
+	
+	ofPixels & getDepthPixels();
+	ofShortPixels & getDepthRawPixels();
+	ofPixels & getRGBPixels();
+	
+	ofTexture & getDepthTextureReference();
+	ofTexture & getRGBTextureReference();
+	
 protected:
 	void threadedFunction();
 

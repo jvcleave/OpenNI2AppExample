@@ -13,6 +13,19 @@ DeviceController::DeviceController()
 {
 	isKinect = false;
 }
+void DeviceController::onDeviceConnected(const DeviceInfo*)
+{
+	ofLogVerbose() << "onDeviceConnected";
+}
+void DeviceController::onDeviceDisconnected(const DeviceInfo*)
+{
+	ofLogVerbose() << "onDeviceDisconnected";
+}
+
+void DeviceController::onDeviceStateChanged(const DeviceInfo*, DeviceState)
+{
+	ofLogVerbose() << "onDeviceStateChanged";
+}
 
 void DeviceController::setup(ofxOpenNI2GrabberSettings _settings)
 {
@@ -29,19 +42,37 @@ void DeviceController::setup(ofxOpenNI2GrabberSettings _settings)
 	}
 	Status status = STATUS_OK;
 	
+	OpenNI::addDeviceStateChangedListener(this);
+	OpenNI::addDeviceConnectedListener(this);
+	OpenNI::addDeviceDisconnectedListener(this);
 	if (settings.useOniFile) 
 	{
 		status = device.open(settings.oniFilePath.c_str());
+		if (status == STATUS_OK) 
+		{
+			ofLogVerbose() << "Open file PASS: " << settings.oniFilePath;
+		}else 
+		{
+			ofLogError() << "Open file " << settings.oniFilePath << " FAIL:" << OpenNI::getExtendedError();
+		}
+
 	}else 
 	{
-		device.open(ANY_DEVICE);
+		status = device.open(ANY_DEVICE);
+		if (status == STATUS_OK) 
+		{
+			string deviceName = device.getDeviceInfo().getName();
+			if (deviceName == "Kinect") 
+			{
+				isKinect = true;
+				ofLogVerbose() << "DEVICE IS KINECT";
+			}
+			ofLogVerbose() << "Device open PASS: " << deviceName;
+		}else 
+		{
+			ofLogError() << "Device open FAIL:" << OpenNI::getExtendedError();
+		}
 	}
-	if (device.getDeviceInfo().getName() == "Kinect") 
-	{
-		isKinect = true;
-		ofLogVerbose() << "DEVICE IS KINECT";
-	}
-	
 }
 //The Kinect/freenect driver does not find anything, The Xtion Pro has options
 const VideoMode* DeviceController::findMode(SensorType sensorType)
@@ -199,5 +230,10 @@ void DeviceController::printVideoModes()
 
 void DeviceController::close()
 {
+	ofLogVerbose() << "DeviceController close";
+	OpenNI::removeDeviceStateChangedListener(this);
+	OpenNI::removeDeviceConnectedListener(this);
+	OpenNI::removeDeviceDisconnectedListener(this);
+	//device.clearSensors();
 	device.close();
 }

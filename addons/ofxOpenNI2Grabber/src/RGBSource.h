@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "OpenNI.h"
-
+#include "DeviceController.h"
 using namespace openni;
 
 class RGBSource : public VideoStream::NewFrameListener
@@ -21,7 +21,7 @@ public:
 	VideoMode videoMode;
 	
 	VideoFrameRef videoFrameRef;
-	bool setup(Device& device);
+	bool setup(DeviceController& deviceController);
 	void allocateBuffers();
 	
 	void close();

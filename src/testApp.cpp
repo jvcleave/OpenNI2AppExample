@@ -4,9 +4,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
-	int maxAttempts = 3;
-	int attemptCounter = 0;
-	
+
 	ofxOpenNI2GrabberSettings settings;
 	settings.width = 640;
 	settings.height = 480;
@@ -14,11 +12,14 @@ void testApp::setup(){
 	settings.doDepth = true;
 	settings.doRawDepth = true;
 	settings.doColor = true;
-	settings.depthPixelFormat = PIXEL_FORMAT_DEPTH_1_MM;
+	settings.depthPixelFormat = PIXEL_FORMAT_DEPTH_100_UM;
 	settings.colorPixelFormat = PIXEL_FORMAT_RGB888;
-	settings.doRegisterDepthToColor = true;
+	settings.doRegisterDepthToColor = false;
 	settings.useOniFile = false;
 	settings.oniFilePath = "UNDEFINED";
+	
+	//will search this directory for an .oni file
+	//if not found will use the first available camera
 	
 	ofDirectory currentONIDirectory(ofToDataPath("current", true));
 	if (currentONIDirectory.exists()) 
@@ -33,20 +34,10 @@ void testApp::setup(){
 		}		
 	}
 	
-	//cameraSettings.depthPixelFormat = openni::PIXEL_FORMAT_DEPTH_1_MM;
-	while (!isReady) 
-	{
-		isReady = oniGrabber.setup(settings);
-		attemptCounter++;
-		
-		ofLogVerbose() << "attemptCounter: " << attemptCounter;
-		if (attemptCounter == maxAttempts) 
-		{
-			ofExit(0);
-		}
-	}
+	isReady = oniGrabber.setup(settings);
+	
 	ofLogVerbose() << "started";
-	oniGrabber.startThread(false, false);
+	
 }
 
 //--------------------------------------------------------------

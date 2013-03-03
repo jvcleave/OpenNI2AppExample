@@ -6,7 +6,10 @@
 
 using namespace openni;
 
-class DeviceController
+class DeviceController:
+public OpenNI::DeviceStateChangedListener,
+public OpenNI::DeviceDisconnectedListener,
+public OpenNI::DeviceConnectedListener
 {
 public:
 	DeviceController();
@@ -21,7 +24,7 @@ public:
 	void registerDepthToColor();
 	const VideoMode* findMode(SensorType sensorType);
 
-	/*OpenNI::addDeviceStateChangedListener(this);
-	OpenNI::addDeviceConnectedListener(this);
-	OpenNI::addDeviceDisconnectedListener(this);*/
+	void onDeviceConnected(const DeviceInfo*);
+	void onDeviceDisconnected(const DeviceInfo*);
+	void onDeviceStateChanged(const DeviceInfo*, DeviceState);
 };
