@@ -5,20 +5,35 @@
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
-	
+	/*
+	Defaults for desktop
+	Some strange behavior when using color
+	the texture will sometimes be black but if you physically pick up the camera (seriously) it will kick on 
+	*/
 	settings.width = 640;
 	settings.height = 480;
 	settings.fps = 30;
 	settings.doDepth = true;
 	settings.doRawDepth = true;
 	settings.doColor = true;
-	
+
+
 #ifdef TARGET_OPENGLES
+	/*
+	 in my tests on the RPi - these work well
+	 depth only 320x240@25,30,60 fps
+	 color only 320x240@25,30,60 fps
+	 
+	 color only 320x240 60fps will have a color shift and occassional glitches
+	 
+	 color will glitch out when both are on
+	 640x480 works in both but much slower
+	 */
 	settings.width = 320;
 	settings.height = 240;
-	settings.fps = 25;
-	settings.doDepth = false;
-	settings.doRawDepth = false;
+	settings.fps = 30;
+	settings.doDepth = true;
+	settings.doRawDepth = true;
 	settings.doColor = true;
 #endif
 
@@ -47,29 +62,32 @@ void testApp::setup(){
 	
 	isReady = oniGrabber.setup(settings);
 	
-	ofLogVerbose() << "started";
+	ofLogVerbose() << "testApp started";
 	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	
+	if (isReady) 
+	{
+		oniGrabber.update();
+	}
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
 	if (isReady) 
 	{
-		oniGrabber.draw();
+		//oniGrabber.draw();
 		if (settings.doDepth) 
 		{
 			ofTexture depth = oniGrabber.getDepthTextureReference();
-			depth.draw(0, depth.getHeight());
+			depth.draw(0, 0);
 		}
 		if (settings.doColor) 
 		{
 			ofTexture color = oniGrabber.getRGBTextureReference();
-			color.draw(color.getWidth(), color.getHeight());
+			color.draw(color.getWidth(), 0);
 		}
 		
 	}
@@ -77,7 +95,7 @@ void testApp::draw(){
 }
 void testApp::exit()
 {
-	ofLogVerbose() << "EXITING, be patient - takes some time";
+	ofLogVerbose() << "\n EXITING, be patient - takes some time \n";
 	if (isReady) 
 	{
 		oniGrabber.close();

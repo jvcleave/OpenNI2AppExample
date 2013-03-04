@@ -19,10 +19,11 @@ RGBSource::RGBSource()
 #ifdef TARGET_OPENGLES
 	doDoubleBuffering = false;
 #endif
+	isOn = false;
 }
 bool RGBSource::setup(DeviceController& deviceController)
 {
-	bool isReady = false;
+	
 	Status status = STATUS_OK;
 	
 	status = videoStream.create(deviceController.device, SENSOR_COLOR);
@@ -64,14 +65,18 @@ bool RGBSource::setup(DeviceController& deviceController)
 			ofLogVerbose() << "RGBSource videoStream addNewFrameListener FAIL" << OpenNI::getExtendedError() ;
 		}
 		
-		isReady = true;
+		isOn = true;
 	}else 
 	{
 		ofLogError() << "RGBSource is INVALID";
 	}
-	return isReady;
+	return isOn;
 }
 
+void RGBSource::update()
+{
+	texture.loadData(*currentPixels);
+}
 void RGBSource::draw()
 {
 	texture.loadData(*currentPixels);

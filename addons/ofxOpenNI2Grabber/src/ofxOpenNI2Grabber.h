@@ -24,6 +24,7 @@ public:
 	ofxOpenNI2Grabber();
 	bool setup(ofxOpenNI2GrabberSettings _settings);
 	void readFrame();
+	void update();
 	void draw();
 	bool close();
 	
@@ -36,10 +37,6 @@ public:
 	bool isReady;
 	
 	ofxOpenNI2GrabberSettings 			settings;
-	
-	/*ofMesh pointCloud;
-	bool isPointCloudValid;
-	ofMesh & getPointCloud();*/
 	
 	ofPixels & getDepthPixels();
 	ofShortPixels & getDepthRawPixels();

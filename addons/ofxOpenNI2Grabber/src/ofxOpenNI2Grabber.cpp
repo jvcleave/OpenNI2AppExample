@@ -3,7 +3,6 @@
  *  OpenNI2AppExample
  *
  *  Created by jason van cleave on 2/28/13.
- *  Copyright 2013 jasonvancleave.com. All rights reserved.
  *
  */
 
@@ -90,11 +89,17 @@ void ofxOpenNI2Grabber::threadedFunction()
 	}
 }
 
+void ofxOpenNI2Grabber::update()
+{
+	if (rgbSource.isOn) rgbSource.update();
+	if (depthSource.isOn) depthSource.update();
+}
+
 void ofxOpenNI2Grabber::draw()
 {
 	//lock();
-	if (settings.doColor) rgbSource.draw();
-	if (settings.doDepth) depthSource.draw();
+	if (rgbSource.isOn) rgbSource.draw();
+	if (depthSource.isOn) depthSource.draw();
 }
 
 ofPixels & ofxOpenNI2Grabber::getDepthPixels()
@@ -139,8 +144,8 @@ bool ofxOpenNI2Grabber::close()
 	isReady = false;
 	stopThread();
 	
-	if (settings.doDepth) depthSource.close();
-	if (settings.doColor) rgbSource.close();
+	if (depthSource.isOn) depthSource.close();
+	if (rgbSource.isOn) rgbSource.close();
 	deviceController.close();
 	
 	OpenNI::shutdown();

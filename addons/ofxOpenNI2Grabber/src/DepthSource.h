@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "OpenNI.h"
 #include "DeviceController.h"
-#include "ofxOpenNI2GrabberSettings.h"
 
 using namespace openni;
 
@@ -31,11 +30,13 @@ public:
 	VideoFrameRef videoFrameRef;
 	bool setup(DeviceController& deviceController);
 	void allocateBuffers();
+	void update();
 	void draw();
 	void close();
 	int	deviceMaxDepth;
 	void onNewFrame(VideoStream&);
 	bool doDoubleBuffering;
-	ofxOpenNI2GrabberSettings settings;
+	bool isOn;
+	bool doRawDepth;
 };
 

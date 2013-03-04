@@ -117,6 +117,10 @@ const VideoMode* DeviceController::findMode(SensorType sensorType)
 				}
 				break;
 			}
+			case SENSOR_IR:
+			{
+				break;
+			}
 		}
 	}
 	return mode;
@@ -236,6 +240,5 @@ void DeviceController::close()
 	OpenNI::removeDeviceStateChangedListener(this);
 	OpenNI::removeDeviceConnectedListener(this);
 	OpenNI::removeDeviceDisconnectedListener(this);
-	//device.clearSensors();
 	device.close();
 }

@@ -11,14 +11,14 @@ DepthSource::DepthSource()
 #ifdef TARGET_OPENGLES
 	doDoubleBuffering = false;
 #endif
+	doRawDepth = false;
+	isOn = false;
 }
 bool DepthSource::setup(DeviceController& deviceController)
 {
-	settings = deviceController.settings;
+	doRawDepth = deviceController.settings.doRawDepth;
 	
-	bool isReady = false;
 	Status status = STATUS_OK;
-	
 	status = videoStream.create(deviceController.device, SENSOR_DEPTH);
 	if (status == STATUS_OK)
 	{
@@ -39,7 +39,7 @@ bool DepthSource::setup(DeviceController& deviceController)
 	}
 	if (videoStream.isValid())
 	{
-		if(!settings.useOniFile && !deviceController.isKinect)
+		if(!deviceController.settings.useOniFile && !deviceController.isKinect)
 		{
 			const VideoMode* requestedMode = deviceController.findMode(SENSOR_DEPTH); 
 			if (requestedMode != NULL) 
@@ -69,18 +69,22 @@ bool DepthSource::setup(DeviceController& deviceController)
 
 		
 		
-		isReady = true;
+		isOn = true;
 	}else 
 	{
 		ofLogError() << "DepthSource is INVALID";
 	}
 	
 	
-	return isReady;
+	return isOn;
 }
-void DepthSource::draw()
+void DepthSource::update()
 {
 	texture.loadData(*currentPixels);
+}
+
+void DepthSource::draw()
+{
 	texture.draw(width, 0);
 }
 void DepthSource::allocateBuffers()
@@ -96,7 +100,7 @@ void DepthSource::allocateBuffers()
 	
 	texture.allocate(width, height, GL_RGBA);
 	
-	if (settings.doRawDepth) 
+	if (doRawDepth) 
 	{
 		rawPixels[0].allocate(width, height, OF_PIXELS_MONO);
 		rawPixels[1].allocate(width, height, OF_PIXELS_MONO);
@@ -115,7 +119,7 @@ void DepthSource::onNewFrame(VideoStream& stream)
 	}
 	const DepthPixel* oniDepthPixels = (const DepthPixel*)videoFrameRef.getData();
 	
-	if (settings.doRawDepth) 
+	if (doRawDepth) 
 	{
 		if (doDoubleBuffering) 
 		{
@@ -174,6 +178,7 @@ void DepthSource::onNewFrame(VideoStream& stream)
 void DepthSource::close()
 {
 	ofLogVerbose() << "DepthSource close";
+	isOn = false;
 	videoStream.stop();
 	videoStream.removeNewFrameListener(this);
 	videoStream.destroy();
