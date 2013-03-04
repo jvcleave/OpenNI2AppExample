@@ -28,6 +28,9 @@ void testApp::setup(){
 	 
 	 color will glitch out when both are on
 	 640x480 works in both but much slower
+	 
+	 depth recordings 320x240 @30fps play back well on the RPi
+	 sample: http://jvcref.com/files/oni/depth_320_240_30_2013-03-04-15-09-15-430.oni
 	 */
 	settings.width = 320;
 	settings.height = 240;
@@ -63,6 +66,34 @@ void testApp::setup(){
 	isReady = oniGrabber.setup(settings);
 	
 	ofLogVerbose() << "testApp started";
+	string oniFileName = "";
+	if (settings.doDepth) 
+	{
+		oniFileName+="depth_";
+	}
+	if (settings.doColor) 
+	{
+		oniFileName+="color_";
+	}
+	oniFileName+= ofToString(settings.width);
+	oniFileName+="_";
+	oniFileName+= ofToString(settings.height);
+	oniFileName+="_";
+	oniFileName+= ofToString(settings.fps);
+	oniFileName+="_";
+	oniFileName+=ofGetTimestampString();
+	
+	string oniRecordingPath = ofToDataPath(oniFileName+".oni", true);
+	recorder.create(oniRecordingPath.c_str());
+	if (oniGrabber.depthSource.isOn) 
+	{
+		recorder.attach(oniGrabber.depthSource.videoStream, false);
+	}
+	if (oniGrabber.rgbSource.isOn) 
+	{
+		recorder.attach(oniGrabber.rgbSource.videoStream, false);
+	}
+	
 	
 }
 
@@ -104,7 +135,14 @@ void testApp::exit()
 }
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	
+	if (key == 'r') 
+	{
+		recorder.start();
+	}
+	if (key == ' ') 
+	{
+		recorder.stop();
+	}
 }
 
 //--------------------------------------------------------------

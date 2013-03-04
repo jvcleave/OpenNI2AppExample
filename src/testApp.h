@@ -22,4 +22,5 @@ class testApp : public ofBaseApp{
 	ofxOpenNI2Grabber oniGrabber;
 	bool isReady;
 	ofxOpenNI2GrabberSettings settings;
+	openni::Recorder recorder;
 };
