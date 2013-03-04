@@ -7,12 +7,18 @@ DepthSource::DepthSource()
 	backPixels = NULL;
 	currentPixels = NULL;
 	deviceMaxDepth = 0;
+	doDoubleBuffering = true;
+#ifdef TARGET_OPENGLES
+	doDoubleBuffering = false;
+#endif
+	doRawDepth = false;
+	isOn = false;
 }
 bool DepthSource::setup(DeviceController& deviceController)
 {
-	bool isReady = false;
-	Status status = STATUS_OK;
+	doRawDepth = deviceController.settings.doRawDepth;
 	
+	Status status = STATUS_OK;
 	status = videoStream.create(deviceController.device, SENSOR_DEPTH);
 	if (status == STATUS_OK)
 	{
@@ -63,18 +69,22 @@ bool DepthSource::setup(DeviceController& deviceController)
 
 		
 		
-		isReady = true;
+		isOn = true;
 	}else 
 	{
 		ofLogError() << "DepthSource is INVALID";
 	}
 	
 	
-	return isReady;
+	return isOn;
 }
+void DepthSource::update()
+{
+	texture.loadData(*currentPixels);
+}
+
 void DepthSource::draw()
 {
-	texture.loadData(*backPixels);
 	texture.draw(width, 0);
 }
 void DepthSource::allocateBuffers()
@@ -90,10 +100,14 @@ void DepthSource::allocateBuffers()
 	
 	texture.allocate(width, height, GL_RGBA);
 	
-	rawPixels[0].allocate(width, height, OF_PIXELS_MONO);
-	rawPixels[1].allocate(width, height, OF_PIXELS_MONO);
-	currentRawPixels = &rawPixels[0];
-	backRawPixels = &rawPixels[1];
+	if (doRawDepth) 
+	{
+		rawPixels[0].allocate(width, height, OF_PIXELS_MONO);
+		rawPixels[1].allocate(width, height, OF_PIXELS_MONO);
+		currentRawPixels = &rawPixels[0];
+		backRawPixels = &rawPixels[1];
+	}
+	
 }
 
 void DepthSource::onNewFrame(VideoStream& stream)
@@ -105,13 +119,28 @@ void DepthSource::onNewFrame(VideoStream& stream)
 	}
 	const DepthPixel* oniDepthPixels = (const DepthPixel*)videoFrameRef.getData();
 	
-	backRawPixels->setFromPixels(oniDepthPixels, width, height, 1);
-	swap(backRawPixels,currentRawPixels);
+	if (doRawDepth) 
+	{
+		if (doDoubleBuffering) 
+		{
+			backRawPixels->setFromPixels(oniDepthPixels, width, height, 1);
+			swap(backRawPixels,currentRawPixels);
+		}else 
+		{
+			currentRawPixels->setFromPixels(oniDepthPixels, width, height, 1);
+		}
+	}
+
+	ofPixels* pixelBuffer = currentPixels;
+	if (doDoubleBuffering) 
+	{
+		pixelBuffer = backPixels;
+	}
 	
 	float max = 255;
 	for (unsigned short y = 0; y < height; y++) 
 	{
-		unsigned char * pixel = backPixels->getPixels() + y * width * 4;
+		unsigned char * pixel = pixelBuffer->getPixels() + y * width * 4;
 		for (unsigned short  x = 0; x < width; x++, oniDepthPixels++, pixel += 4)
 		{
 			unsigned char red = 0;
@@ -139,13 +168,17 @@ void DepthSource::onNewFrame(VideoStream& stream)
 			}
 		}
 	}
-	swap(backPixels,currentPixels);
+	if (doDoubleBuffering) 
+	{
+		swap(backPixels,currentPixels);
+	}
 	
 }
 
 void DepthSource::close()
 {
 	ofLogVerbose() << "DepthSource close";
+	isOn = false;
 	videoStream.stop();
 	videoStream.removeNewFrameListener(this);
 	videoStream.destroy();

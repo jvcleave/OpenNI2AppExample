@@ -25,7 +25,13 @@ public:
 	void allocateBuffers();
 	
 	void close();
+	void update();
 	void draw();
+	
+	bool doDoubleBuffering;
+
 	void onNewFrame(VideoStream&);
+	
+	bool isOn;
 };
 

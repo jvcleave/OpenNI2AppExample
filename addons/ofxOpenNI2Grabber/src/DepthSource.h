@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "OpenNI.h"
 #include "DeviceController.h"
+
 using namespace openni;
 
 class DepthSource : public VideoStream::NewFrameListener
@@ -29,9 +30,13 @@ public:
 	VideoFrameRef videoFrameRef;
 	bool setup(DeviceController& deviceController);
 	void allocateBuffers();
+	void update();
 	void draw();
 	void close();
 	int	deviceMaxDepth;
 	void onNewFrame(VideoStream&);
+	bool doDoubleBuffering;
+	bool isOn;
+	bool doRawDepth;
 };
 

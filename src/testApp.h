@@ -21,4 +21,5 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 	ofxOpenNI2Grabber oniGrabber;
 	bool isReady;
+	ofxOpenNI2GrabberSettings settings;
 };
