@@ -139,8 +139,8 @@ bool ofxOpenNI2Grabber::close()
 	isReady = false;
 	stopThread();
 	
-	depthSource.close();
-	rgbSource.close();
+	if (settings.doColor) depthSource.close();
+	if (settings.doColor) rgbSource.close();
 	deviceController.close();
 	
 	OpenNI::shutdown();

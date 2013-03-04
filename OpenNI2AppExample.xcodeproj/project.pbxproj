@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03A9452A16E43D6A0043B067 /* libOpenNI2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A9452816E43D6A0043B067 /* libOpenNI2.a */; };
+		03A9452B16E43D6A0043B067 /* libXnLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A9452916E43D6A0043B067 /* libXnLib.a */; };
 		03CB29CA16E2BB2D00892016 /* libfreenect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB299B16E2BB2D00892016 /* libfreenect.a */; };
 		03CB29CB16E2BB2D00892016 /* libfreenect_sync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB299C16E2BB2D00892016 /* libfreenect_sync.a */; };
-		03CB29CD16E2BB2D00892016 /* libOpenNI2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB29B816E2BB2D00892016 /* libOpenNI2.a */; };
 		03CB29D316E2BB2D00892016 /* DepthSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C116E2BB2D00892016 /* DepthSource.cpp */; };
 		03CB29D416E2BB2D00892016 /* DeviceController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C316E2BB2D00892016 /* DeviceController.cpp */; };
 		03CB29D516E2BB2D00892016 /* ofxOpenNI2Grabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C516E2BB2D00892016 /* ofxOpenNI2Grabber.cpp */; };
 		03CB29D616E2BB2D00892016 /* RGBSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C816E2BB2D00892016 /* RGBSource.cpp */; };
-		03CB29F416E2BC0F00892016 /* libXnLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB29F316E2BC0F00892016 /* libXnLib.a */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -68,6 +68,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03A9452816E43D6A0043B067 /* libOpenNI2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOpenNI2.a; path = osx/libOpenNI2.a; sourceTree = "<group>"; };
+		03A9452916E43D6A0043B067 /* libXnLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXnLib.a; path = osx/libXnLib.a; sourceTree = "<group>"; };
 		03CB22C416DF1C9400892016 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenNI.h; path = addons/ofxOpenNI2Grabber/libs/openni2/include/OpenNI.h; sourceTree = SOURCE_ROOT; };
 		03CB299716E2BB2D00892016 /* libfreenect-registration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "libfreenect-registration.h"; sourceTree = "<group>"; };
 		03CB299816E2BB2D00892016 /* libfreenect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfreenect.h; sourceTree = "<group>"; };
@@ -91,7 +93,6 @@
 		03CB29B216E2BB2D00892016 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNI.h; sourceTree = "<group>"; };
 		03CB29B316E2BB2D00892016 /* PS1080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PS1080.h; sourceTree = "<group>"; };
 		03CB29B516E2BB2D00892016 /* OniPlatformWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatformWin32.h; sourceTree = "<group>"; };
-		03CB29B816E2BB2D00892016 /* libOpenNI2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOpenNI2.a; sourceTree = "<group>"; };
 		03CB29C116E2BB2D00892016 /* DepthSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DepthSource.cpp; sourceTree = "<group>"; };
 		03CB29C216E2BB2D00892016 /* DepthSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthSource.h; sourceTree = "<group>"; };
 		03CB29C316E2BB2D00892016 /* DeviceController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceController.cpp; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		03CB29C716E2BB2D00892016 /* ofxOpenNI2GrabberSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2GrabberSettings.h; sourceTree = "<group>"; };
 		03CB29C816E2BB2D00892016 /* RGBSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBSource.cpp; sourceTree = "<group>"; };
 		03CB29C916E2BB2D00892016 /* RGBSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGBSource.h; sourceTree = "<group>"; };
-		03CB29F316E2BC0F00892016 /* libXnLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libXnLib.a; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -113,7 +113,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* OpenNI2AppExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenNI2AppExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* OpenNI2AppExampleDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenNI2AppExampleDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
@@ -152,8 +152,8 @@
 				E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */,
 				03CB29CA16E2BB2D00892016 /* libfreenect.a in Frameworks */,
 				03CB29CB16E2BB2D00892016 /* libfreenect_sync.a in Frameworks */,
-				03CB29CD16E2BB2D00892016 /* libOpenNI2.a in Frameworks */,
-				03CB29F416E2BC0F00892016 /* libXnLib.a in Frameworks */,
+				03A9452A16E43D6A0043B067 /* libOpenNI2.a in Frameworks */,
+				03A9452B16E43D6A0043B067 /* libXnLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,8 +299,8 @@
 		03CB29B616E2BB2D00892016 /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				03CB29F316E2BC0F00892016 /* libXnLib.a */,
-				03CB29B816E2BB2D00892016 /* libOpenNI2.a */,
+				03A9452816E43D6A0043B067 /* libOpenNI2.a */,
+				03A9452916E43D6A0043B067 /* libXnLib.a */,
 			);
 			path = libs;
 			sourceTree = "<group>";
@@ -385,7 +385,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* OpenNI2AppExample.app */,
+				E4B69B5B0A3A1756003C02F2 /* OpenNI2AppExampleDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -428,7 +428,7 @@
 			);
 			name = OpenNI2AppExample;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* OpenNI2AppExample.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* OpenNI2AppExampleDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -484,7 +484,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\n#you will need this if you use on a different project\ncp -R \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/OpenNI2\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/OpenNI2\";\n";
+			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\n#you will need this if you use on a different project\ncp -R \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/osx/OpenNI2\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/OpenNI2\";";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -668,6 +668,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs/OpenNI2/Drivers\"";
@@ -675,6 +676,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/libfreenect/libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs/OpenNI2/Drivers\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs/osx\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
 				WRAPPER_EXTENSION = app;
@@ -766,7 +768,9 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs/OpenNI2/Drivers\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/addons/ofxOpenNI2Grabber/libs/libfreenect/libs\"";
