@@ -61,6 +61,7 @@ void DeviceController::setup(ofxOpenNI2GrabberSettings _settings)
 		status = device.open(ANY_DEVICE);
 		if (status == STATUS_OK) 
 		{
+			printVideoModes();
 			string deviceName = device.getDeviceInfo().getName();
 			if (deviceName == "Kinect") 
 			{
@@ -71,6 +72,7 @@ void DeviceController::setup(ofxOpenNI2GrabberSettings _settings)
 		}else 
 		{
 			ofLogError() << "Device open FAIL:" << OpenNI::getExtendedError();
+			ofLogWarning() << "If you are on the RPi and using the Xtion Pro, See /addons/ofxOpenNI2Grabber/libs/openni2/udev_rules_for_xtion_pro/README.txt";
 		}
 	}
 }

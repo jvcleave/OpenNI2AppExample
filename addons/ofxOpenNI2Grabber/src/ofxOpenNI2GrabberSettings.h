@@ -21,7 +21,7 @@ public:
 	PixelFormat colorPixelFormat;	//PIXEL_FORMAT_RGB888, PIXEL_FORMAT_YUV422, PIXEL_FORMAT_GRAY8, PIXEL_FORMAT_GRAY16, PIXEL_FORMAT_JPEG
 	bool	doRegisterDepthToColor;
 	bool	useOniFile;
-	string oniFilePath;
+	string oniFilePath; 
 	
 	ofxOpenNI2GrabberSettings()
 	{
