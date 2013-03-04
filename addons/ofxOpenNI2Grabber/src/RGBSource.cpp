@@ -15,6 +15,10 @@ RGBSource::RGBSource()
 	height = 0;
 	backPixels = NULL;
 	currentPixels = NULL;
+	doDoubleBuffering = true;
+#ifdef TARGET_OPENGLES
+	doDoubleBuffering = false;
+#endif
 }
 bool RGBSource::setup(DeviceController& deviceController)
 {
@@ -90,8 +94,16 @@ void RGBSource::onNewFrame(VideoStream& stream)
 {
 	//ofLogVerbose() << "RGBSource::onNewFrame";
 	stream.readFrame(&videoFrameRef);
-	backPixels->setFromPixels((unsigned char *)videoFrameRef.getData(), width, height, OF_IMAGE_COLOR);
-	swap(backPixels, currentPixels);
+	if (doDoubleBuffering) 
+	{
+		backPixels->setFromPixels((unsigned char *)videoFrameRef.getData(), width, height, OF_IMAGE_COLOR);
+		swap(backPixels, currentPixels);
+	}else 
+	{
+		currentPixels->setFromPixels((unsigned char *)videoFrameRef.getData(), width, height, OF_IMAGE_COLOR);
+	}
+
+	
 }
 void RGBSource::close()
 {

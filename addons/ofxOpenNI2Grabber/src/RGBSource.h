@@ -26,6 +26,9 @@ public:
 	
 	void close();
 	void draw();
+	
+	bool doDoubleBuffering;
+
 	void onNewFrame(VideoStream&);
 };
 

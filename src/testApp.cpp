@@ -5,13 +5,24 @@
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
-	ofxOpenNI2GrabberSettings settings;
-	settings.width = 320;
-	settings.height = 240;
-	settings.fps = 25;
+	
+	settings.width = 640;
+	settings.height = 480;
+	settings.fps = 30;
 	settings.doDepth = true;
 	settings.doRawDepth = true;
 	settings.doColor = true;
+	
+#ifdef TARGET_OPENGLES
+	settings.width = 320;
+	settings.height = 240;
+	settings.fps = 25;
+	settings.doDepth = false;
+	settings.doRawDepth = false;
+	settings.doColor = true;
+#endif
+
+	
 	settings.depthPixelFormat = PIXEL_FORMAT_DEPTH_1_MM;
 	settings.colorPixelFormat = PIXEL_FORMAT_RGB888;
 	settings.doRegisterDepthToColor = false;
@@ -50,6 +61,17 @@ void testApp::draw(){
 	if (isReady) 
 	{
 		oniGrabber.draw();
+		if (settings.doDepth) 
+		{
+			ofTexture depth = oniGrabber.getDepthTextureReference();
+			depth.draw(0, depth.getHeight());
+		}
+		if (settings.doColor) 
+		{
+			ofTexture color = oniGrabber.getRGBTextureReference();
+			color.draw(color.getWidth(), color.getHeight());
+		}
+		
 	}
 	ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()), 20, 400, ofColor(0, 0, 0, 128), ofColor::yellow);
 }

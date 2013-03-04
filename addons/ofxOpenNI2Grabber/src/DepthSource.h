@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "OpenNI.h"
 #include "DeviceController.h"
+#include "ofxOpenNI2GrabberSettings.h"
+
 using namespace openni;
 
 class DepthSource : public VideoStream::NewFrameListener
@@ -33,5 +35,7 @@ public:
 	void close();
 	int	deviceMaxDepth;
 	void onNewFrame(VideoStream&);
+	bool doDoubleBuffering;
+	ofxOpenNI2GrabberSettings settings;
 };
 
