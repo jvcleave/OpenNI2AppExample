@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOpenNI2Grabber.h"
+#include "ofxOpenNI2Recorder.h"
 
 class testApp : public ofBaseApp{
 	public:
@@ -22,5 +23,5 @@ class testApp : public ofBaseApp{
 	ofxOpenNI2Grabber oniGrabber;
 	bool isReady;
 	ofxOpenNI2GrabberSettings settings;
-	openni::Recorder recorder;
+	ofxOpenNI2Recorder recorder;
 };

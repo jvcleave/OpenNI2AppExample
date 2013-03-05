@@ -4,7 +4,6 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
-	
 	/*
 	Defaults for desktop
 	Some strange behavior when using color
@@ -64,35 +63,9 @@ void testApp::setup(){
 	}
 	
 	isReady = oniGrabber.setup(settings);
-	
+	recorder.setup(&oniGrabber);
 	ofLogVerbose() << "testApp started";
-	string oniFileName = "";
-	if (settings.doDepth) 
-	{
-		oniFileName+="depth_";
-	}
-	if (settings.doColor) 
-	{
-		oniFileName+="color_";
-	}
-	oniFileName+= ofToString(settings.width);
-	oniFileName+="_";
-	oniFileName+= ofToString(settings.height);
-	oniFileName+="_";
-	oniFileName+= ofToString(settings.fps);
-	oniFileName+="_";
-	oniFileName+=ofGetTimestampString();
 	
-	string oniRecordingPath = ofToDataPath(oniFileName+".oni", true);
-	recorder.create(oniRecordingPath.c_str());
-	if (oniGrabber.depthSource.isOn) 
-	{
-		recorder.attach(oniGrabber.depthSource.videoStream, false);
-	}
-	if (oniGrabber.rgbSource.isOn) 
-	{
-		recorder.attach(oniGrabber.rgbSource.videoStream, false);
-	}
 	
 	
 }
@@ -122,13 +95,33 @@ void testApp::draw(){
 		}
 		
 	}
+	
+	ofEnableAlphaBlending();
 	ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate()), 20, 400, ofColor(0, 0, 0, 128), ofColor::yellow);
+	
+	ofColor textColor(ofColor::green);
+	string recordingStatus = "Recording status: ";
+	if (recorder.isRecording) 
+	{
+		textColor = ofColor::red;
+		recordingStatus+= "RECORDING";
+	}else 
+	{
+		recordingStatus+= "NOT RECORDING";
+	}
+
+	ofDrawBitmapStringHighlight(recordingStatus, 20, 420, ofColor(0, 0, 0, 128), textColor);
+	ofDisableAlphaBlending();
+
 }
+
 void testApp::exit()
 {
 	ofLogVerbose() << "\n EXITING, be patient - takes some time \n";
+	recorder.close();
 	if (isReady) 
 	{
+		
 		oniGrabber.close();
 	}
 	
@@ -137,13 +130,14 @@ void testApp::exit()
 void testApp::keyPressed(int key){
 	if (key == 'r') 
 	{
-		recorder.start();
+		recorder.startRecording();
 	}
 	if (key == ' ') 
 	{
-		recorder.stop();
+		recorder.stopRecording();
 	}
 }
+
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){

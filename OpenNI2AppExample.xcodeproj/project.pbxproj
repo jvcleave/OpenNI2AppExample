@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0313D6B116E5B35C0010679A /* ofxOpenNI2Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313D6B016E5B35C0010679A /* ofxOpenNI2Recorder.cpp */; };
 		03A9452A16E43D6A0043B067 /* libOpenNI2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A9452816E43D6A0043B067 /* libOpenNI2.a */; };
 		03A9452B16E43D6A0043B067 /* libXnLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A9452916E43D6A0043B067 /* libXnLib.a */; };
 		03CB29CA16E2BB2D00892016 /* libfreenect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB299B16E2BB2D00892016 /* libfreenect.a */; };
@@ -68,6 +69,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0313D6AF16E5B35C0010679A /* ofxOpenNI2Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenNI2Recorder.h; sourceTree = "<group>"; };
+		0313D6B016E5B35C0010679A /* ofxOpenNI2Recorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOpenNI2Recorder.cpp; sourceTree = "<group>"; };
 		03A9452816E43D6A0043B067 /* libOpenNI2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOpenNI2.a; path = osx/libOpenNI2.a; sourceTree = "<group>"; };
 		03A9452916E43D6A0043B067 /* libXnLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXnLib.a; path = osx/libXnLib.a; sourceTree = "<group>"; };
 		03CB22C416DF1C9400892016 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenNI.h; path = include/OpenNI.h; sourceTree = "<group>"; };
@@ -318,6 +321,8 @@
 				03CB29C716E2BB2D00892016 /* ofxOpenNI2GrabberSettings.h */,
 				03CB29C816E2BB2D00892016 /* RGBSource.cpp */,
 				03CB29C916E2BB2D00892016 /* RGBSource.h */,
+				0313D6AF16E5B35C0010679A /* ofxOpenNI2Recorder.h */,
+				0313D6B016E5B35C0010679A /* ofxOpenNI2Recorder.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -499,6 +504,7 @@
 				03CB29D416E2BB2D00892016 /* DeviceController.cpp in Sources */,
 				03CB29D516E2BB2D00892016 /* ofxOpenNI2Grabber.cpp in Sources */,
 				03CB29D616E2BB2D00892016 /* RGBSource.cpp in Sources */,
+				0313D6B116E5B35C0010679A /* ofxOpenNI2Recorder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
