@@ -20,5 +20,6 @@ public:
 	
 	bool isReady;
 	bool isRecording;
-	
+	bool didRecord;
+	string recordingFilePath;
 };

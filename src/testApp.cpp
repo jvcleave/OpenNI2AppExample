@@ -9,8 +9,8 @@ void testApp::setup(){
 	Some strange behavior when using color
 	the texture will sometimes be black but if you physically pick up the camera (seriously) it will kick on 
 	*/
-	settings.width = 640;
-	settings.height = 480;
+	settings.width = 320;
+	settings.height = 240;
 	settings.fps = 30;
 	settings.doDepth = true;
 	settings.doRawDepth = true;

@@ -20,6 +20,7 @@ ofxOpenNI2Recorder::ofxOpenNI2Recorder()
 {
 	isReady = false;
 	isRecording = false;
+	didRecord = false;
 }
 ofxOpenNI2Recorder::~ofxOpenNI2Recorder()
 {
@@ -51,7 +52,7 @@ void ofxOpenNI2Recorder::setup(ofxOpenNI2Grabber* grabber_)
 	recordingFileName+= ofToString(grabber->settings.fps);
 	recordingFileName+="fps.oni";
 	
-	string recordingFilePath = ofToDataPath(recordingFileName, true);
+	recordingFilePath = ofToDataPath(recordingFileName, true);
 	
 	status = recorder.create(recordingFilePath.c_str());
 	if (status != STATUS_OK) 
@@ -86,9 +87,11 @@ void ofxOpenNI2Recorder::startRecording()
 		ofLogError() << "Not creating recording, Did you call setup?";
 	}
 	Status status = recorder.start();
+	
 	if (status == STATUS_OK) 
 	{
 		isRecording = true;
+		didRecord = true;
 	}else 
 	{
 		ofLogError() << "Start Recording FAIL: " << OpenNI::getExtendedError();
@@ -115,6 +118,17 @@ void ofxOpenNI2Recorder::stopRecording()
 
 void ofxOpenNI2Recorder::close()
 {
+	if (!didRecord) {
+		ofLogVerbose() << "we never recorded anything so deleting the file";
+		ofFile file(recordingFilePath);
+		if (file.exists()) 
+		{
+			int HundredK = 100*1000;
+			if (file.getSize()<HundredK) {
+				file.remove(); //yolo
+			}
+		}
+	}
 	ofLogVerbose() << "ofxOpenNI2Recorder::close";
 	if (isRecording) 
 	{
