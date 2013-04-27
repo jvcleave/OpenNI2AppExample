@@ -9,3 +9,5 @@ build/
 *.oni
 bin
 obj
+
+xcuserdata
