@@ -14,7 +14,8 @@ void testApp::setup(){
 	settings.fps = 30;
 	settings.doDepth = true;
 	settings.doRawDepth = true;
-	settings.doColor = true;
+	settings.doColor = false;
+	settings.doIr = true;
 
 
 #ifdef TARGET_OPENGLES
@@ -42,6 +43,7 @@ void testApp::setup(){
 	
 	settings.depthPixelFormat = PIXEL_FORMAT_DEPTH_1_MM;
 	settings.colorPixelFormat = PIXEL_FORMAT_RGB888;
+	settings.irPixelFormat = PIXEL_FORMAT_GRAY16;
 	settings.doRegisterDepthToColor = false;
 	settings.useOniFile = false;
 	settings.oniFilePath = "UNDEFINED";
@@ -63,7 +65,7 @@ void testApp::setup(){
 	}
 	
 	isReady = oniGrabber.setup(settings);
-	recorder.setup(&oniGrabber);
+	//recorder.setup(&oniGrabber);
 	ofLogVerbose() << "testApp started";
 	
 	
@@ -85,15 +87,27 @@ void testApp::draw(){
 		//oniGrabber.draw();
 		if (settings.doDepth) 
 		{
-			ofTexture depth = oniGrabber.getDepthTextureReference();
+			ofTexture& depth = oniGrabber.getDepthTextureReference();
 			depth.draw(0, 0);
+			
+			ofMesh m;
+			for(int y = 0; y < depth.getHeight(); y++){
+				for(int x = 0; x < depth.getWidth(); x++){
+					m.addVertex(oniGrabber.convertDepthToWorld(x, y));
+				}
+			}
+			m.drawVertices();
 		}
 		if (settings.doColor) 
 		{
-			ofTexture color = oniGrabber.getRGBTextureReference();
+			ofTexture& color = oniGrabber.getRGBTextureReference();
 			color.draw(color.getWidth(), 0);
 		}
 		
+		if(settings.doIr){
+			ofTexture& ir = oniGrabber.getIRTextureReference();
+			ir.draw(ir.getWidth(), 0);
+		}
 	}
 	
 	ofEnableAlphaBlending();

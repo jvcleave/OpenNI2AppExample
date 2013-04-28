@@ -3,13 +3,12 @@
 #include "ofMain.h"
 #include "OpenNI.h"
 #include "DeviceController.h"
-
 using namespace openni;
 
-class DepthSource : public VideoStream::NewFrameListener
+class IRSource : public VideoStream::NewFrameListener
 {
 public:
-	DepthSource();
+	IRSource();
 	int width;
 	int height;
 	VideoStream videoStream;
@@ -19,25 +18,20 @@ public:
 	ofPixels* backPixels;
 	ofPixels* currentPixels;
 	
-	
-	ofShortPixels rawPixels[2];
-	ofShortPixels* backRawPixels;
-	ofShortPixels* currentRawPixels;
-	
-	ofVec3f convertDepthToWorld(int depthX, int depthY);
-	
 	VideoMode videoMode;
 	
 	VideoFrameRef videoFrameRef;
 	bool setup(DeviceController& deviceController);
 	void allocateBuffers();
+	
+	void close();
 	void update();
 	void draw();
-	void close();
-	int	deviceMaxDepth;
-	void onNewFrame(VideoStream&);
+	
 	bool doDoubleBuffering;
+
+	void onNewFrame(VideoStream&);
+	
 	bool isOn;
-	bool doRawDepth;
 };
 

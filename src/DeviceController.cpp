@@ -119,6 +119,16 @@ const VideoMode* DeviceController::findMode(SensorType sensorType)
 			}
 			case SENSOR_IR:
 			{
+				if(
+				currentMode.getPixelFormat() == settings.irPixelFormat
+				&& currentMode.getResolutionX() == settings.width
+				&& currentMode.getResolutionY() == settings.height
+				&& currentMode.getFps() == settings.fps
+				){
+					mode = &currentMode;
+					printVideoMode(*mode);
+					return mode;
+				}
 				break;
 			}
 		}
@@ -232,6 +242,16 @@ void DeviceController::printVideoModes()
 		ofLogVerbose() << "DEPTH MODE: " << i;
 		printVideoMode(depthVideoModes[i]);
 	}
+	
+	const SensorInfo* irSensorInfo = device.getSensorInfo(SENSOR_IR);
+	const Array<VideoMode>& irVideoModes = irSensorInfo->getSupportedVideoModes();
+	ofLogVerbose() << "\n--------IR MODES--------\n";
+	for (int i=0; i<irVideoModes.getSize(); i++)
+	{
+		ofLogVerbose() << "IR MODE: " << i;
+		printVideoMode(irVideoModes[i]);
+	}
+
 }
 
 void DeviceController::close()
