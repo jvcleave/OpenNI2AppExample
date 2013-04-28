@@ -27,6 +27,7 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E7D6FDF4172DABBB000F4692 /* IRSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7D6FDF2172DABBB000F4692 /* IRSource.cpp */; };
 		E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */; };
 		E7E077E815D3B6510020DFD4 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E077E715D3B6510020DFD4 /* QTKit.framework */; };
 		E7F985F815E0DEA3003869B5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F985F515E0DE99003869B5 /* Accelerate.framework */; };
@@ -98,6 +99,8 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E7D6FDF2172DABBB000F4692 /* IRSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IRSource.cpp; path = ../src/IRSource.cpp; sourceTree = "<group>"; };
+		E7D6FDF3172DABBB000F4692 /* IRSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IRSource.h; path = ../src/IRSource.h; sourceTree = "<group>"; };
 		E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		E7E077E715D3B6510020DFD4 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		E7F985F515E0DE99003869B5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
@@ -288,6 +291,10 @@
 			children = (
 				27b3a0b478a4bdb5897f7803c991a3e7 /* DepthSource.cpp */,
 				3a605debb82839eb2412c2b4dfdc7cd0 /* DepthSource.h */,
+				f27f4aeec220952e3fdd76b6eb37eb66 /* RGBSource.cpp */,
+				7ba24462249476bbffb9c83cbd89023c /* RGBSource.h */,
+				E7D6FDF2172DABBB000F4692 /* IRSource.cpp */,
+				E7D6FDF3172DABBB000F4692 /* IRSource.h */,
 				8c4a8fae03c72eb1c8cb4dd7ea4b57ba /* DeviceController.cpp */,
 				1b5ca0e3cd2fd46f0618f650307819b5 /* DeviceController.h */,
 				64de20fd6d41984f352687960133276c /* ofxOpenNI2Grabber.cpp */,
@@ -295,8 +302,6 @@
 				c48315756f874cf779236ca15eaca621 /* ofxOpenNI2GrabberSettings.h */,
 				5edb29e9a9be7e54353f2f39645f75ed /* ofxOpenNI2Recorder.cpp */,
 				bc47851e278d8a222abb70a325fd4cbb /* ofxOpenNI2Recorder.h */,
-				f27f4aeec220952e3fdd76b6eb37eb66 /* RGBSource.cpp */,
-				7ba24462249476bbffb9c83cbd89023c /* RGBSource.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -400,6 +405,7 @@
 				cddf080ec04c72eb4ce62a4b0b2ab590 /* ofxOpenNI2Grabber.cpp in Sources */,
 				02cb1aa5f7f1a282105aac4b4287fa2b /* ofxOpenNI2Recorder.cpp in Sources */,
 				62347cdddec3f19a2b5ad2e4e20d4f59 /* RGBSource.cpp in Sources */,
+				E7D6FDF4172DABBB000F4692 /* IRSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

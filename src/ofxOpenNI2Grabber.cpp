@@ -62,6 +62,15 @@ bool ofxOpenNI2Grabber::setup(ofxOpenNI2GrabberSettings settings_)
 			settings.doColor = false;
 		}
 	}
+	else if(settings.doIr){
+		if(irSource.setup(deviceController))
+		{
+			streams.push_back(&irSource.videoStream);
+		}
+		else{
+			settings.doIr = false;
+		}
+	}
 	
 	if(settings.doRegisterDepthToColor)
 	{
@@ -89,9 +98,19 @@ void ofxOpenNI2Grabber::threadedFunction()
 	}
 }
 
+
+ofVec3f ofxOpenNI2Grabber::convertDepthToWorld(int depthX, int depthY){	
+	ofVec3f result;
+	CoordinateConverter::convertDepthToWorld(depthSource.videoStream, depthX, depthY,
+											 (DepthPixel)(depthSource.currentRawPixels->getPixels()[depthY * depthSource.width + depthX]),
+											 &result.x,&result.y,&result.z );
+	return result;
+}
+
 void ofxOpenNI2Grabber::update()
 {
 	if (rgbSource.isOn) rgbSource.update();
+	if (irSource.isOn) irSource.update();
 	if (depthSource.isOn) depthSource.update();
 }
 
@@ -99,6 +118,7 @@ void ofxOpenNI2Grabber::draw()
 {
 	//lock();
 	if (rgbSource.isOn) rgbSource.draw();
+	if (irSource.isOn) irSource.draw();
 	if (depthSource.isOn) depthSource.draw();
 }
 
@@ -126,6 +146,12 @@ ofPixels & ofxOpenNI2Grabber::getRGBPixels()
 	return *rgbSource.currentPixels;
 }
 
+ofPixels & ofxOpenNI2Grabber::getIRPixels()
+{
+	Poco::ScopedLock<ofMutex> lock(mutex);
+	return *irSource.currentPixels;
+}
+
 ofTexture & ofxOpenNI2Grabber::getDepthTextureReference()
 {
 	return depthSource.texture;
@@ -136,7 +162,10 @@ ofTexture & ofxOpenNI2Grabber::getRGBTextureReference()
 	return rgbSource.texture;
 }
 
-
+ofTexture & ofxOpenNI2Grabber::getIRTextureReference()
+{
+	return irSource.texture;
+}
 
 bool ofxOpenNI2Grabber::close()
 {
@@ -146,6 +175,7 @@ bool ofxOpenNI2Grabber::close()
 	
 	if (depthSource.isOn) depthSource.close();
 	if (rgbSource.isOn) rgbSource.close();
+	if (irSource.isOn) irSource.close();
 	deviceController.close();
 	
 	OpenNI::shutdown();

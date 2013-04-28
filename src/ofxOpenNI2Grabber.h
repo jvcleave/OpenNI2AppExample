@@ -13,6 +13,7 @@
 
 #include "RGBSource.h"
 #include "DepthSource.h"
+#include "IRSource.h"
 
 using namespace openni;
 
@@ -29,6 +30,7 @@ public:
 	bool close();
 	
 	RGBSource rgbSource;
+	IRSource irSource;
 	DepthSource depthSource;
 	DeviceController deviceController;
 	
@@ -38,12 +40,17 @@ public:
 	
 	ofxOpenNI2GrabberSettings 			settings;
 	
+	
+	ofVec3f convertDepthToWorld(int depthX, int depthY);
+	
 	ofPixels & getDepthPixels();
 	ofShortPixels & getDepthRawPixels();
 	ofPixels & getRGBPixels();
+	ofPixels & getIRPixels();
 	
 	ofTexture & getDepthTextureReference();
 	ofTexture & getRGBTextureReference();
+	ofTexture & getIRTextureReference();
 	
 protected:
 	void threadedFunction();
