@@ -89,7 +89,7 @@
 # incorporated directly into the final executable application binary.
 # TODO: should this be a default setting?
 ################################################################################
-OPENNI2_LIBS = $(PROJECT_ROOT)/addons/ofxOpenNI2Grabber/libs/openni2/libs/rpi
+OPENNI2_LIBS = $(OF_ADDONS_PATH)/ofxOpenNI2Grabber/libs/openni2/libs/rpi
 OpenNI2_STATIC=$(OPENNI2_LIBS)/libOpenNI2.a
 XN_STATIC_LIB = $(OPENNI2_LIBS)/libXnLib.a
 
@@ -121,7 +121,7 @@ PROJECT_LDFLAGS=-L$(OPENNI2_LIBS) $(OpenNI2_STATIC) $(XN_STATIC_LIB)
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -I $(PROJECT_DIR)addons/ofxOpenNI2Grabber/libs/openni2/include
+PROJECT_CFLAGS = -I $(OF_ADDONS_PATH)/ofxOpenNI2Grabber/libs/openni2/include
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
