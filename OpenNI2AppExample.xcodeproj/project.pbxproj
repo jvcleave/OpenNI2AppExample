@@ -10,8 +10,6 @@
 		0313D6B116E5B35C0010679A /* ofxOpenNI2Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313D6B016E5B35C0010679A /* ofxOpenNI2Recorder.cpp */; };
 		03A9452A16E43D6A0043B067 /* libOpenNI2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A9452816E43D6A0043B067 /* libOpenNI2.a */; };
 		03A9452B16E43D6A0043B067 /* libXnLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A9452916E43D6A0043B067 /* libXnLib.a */; };
-		03CB29CA16E2BB2D00892016 /* libfreenect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB299B16E2BB2D00892016 /* libfreenect.a */; };
-		03CB29CB16E2BB2D00892016 /* libfreenect_sync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CB299C16E2BB2D00892016 /* libfreenect_sync.a */; };
 		03CB29D316E2BB2D00892016 /* DepthSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C116E2BB2D00892016 /* DepthSource.cpp */; };
 		03CB29D416E2BB2D00892016 /* DeviceController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C316E2BB2D00892016 /* DeviceController.cpp */; };
 		03CB29D516E2BB2D00892016 /* ofxOpenNI2Grabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03CB29C516E2BB2D00892016 /* ofxOpenNI2Grabber.cpp */; };
@@ -74,11 +72,6 @@
 		03A9452816E43D6A0043B067 /* libOpenNI2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOpenNI2.a; path = osx/libOpenNI2.a; sourceTree = "<group>"; };
 		03A9452916E43D6A0043B067 /* libXnLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libXnLib.a; path = osx/libXnLib.a; sourceTree = "<group>"; };
 		03CB22C416DF1C9400892016 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenNI.h; path = include/OpenNI.h; sourceTree = "<group>"; };
-		03CB299716E2BB2D00892016 /* libfreenect-registration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "libfreenect-registration.h"; sourceTree = "<group>"; };
-		03CB299816E2BB2D00892016 /* libfreenect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfreenect.h; sourceTree = "<group>"; };
-		03CB299916E2BB2D00892016 /* libfreenect_sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfreenect_sync.h; sourceTree = "<group>"; };
-		03CB299B16E2BB2D00892016 /* libfreenect.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreenect.a; sourceTree = "<group>"; };
-		03CB299C16E2BB2D00892016 /* libfreenect_sync.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreenect_sync.a; sourceTree = "<group>"; };
 		03CB29A016E2BB2D00892016 /* OniPlatformAndroid-Arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OniPlatformAndroid-Arm.h"; sourceTree = "<group>"; };
 		03CB29A216E2BB2D00892016 /* OniDriverAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniDriverAPI.h; sourceTree = "<group>"; };
 		03CB29A316E2BB2D00892016 /* OniDriverTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniDriverTypes.h; sourceTree = "<group>"; };
@@ -153,8 +146,6 @@
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 				E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */,
-				03CB29CA16E2BB2D00892016 /* libfreenect.a in Frameworks */,
-				03CB29CB16E2BB2D00892016 /* libfreenect_sync.a in Frameworks */,
 				03A9452A16E43D6A0043B067 /* libOpenNI2.a in Frameworks */,
 				03A9452B16E43D6A0043B067 /* libXnLib.a in Frameworks */,
 			);
@@ -176,44 +167,7 @@
 		03CB299316E2BB2D00892016 /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				03CB299416E2BB2D00892016 /* libfreenect */,
 				03CB299D16E2BB2D00892016 /* openni2 */,
-			);
-			path = libs;
-			sourceTree = "<group>";
-		};
-		03CB299416E2BB2D00892016 /* libfreenect */ = {
-			isa = PBXGroup;
-			children = (
-				03CB299516E2BB2D00892016 /* include */,
-				03CB299A16E2BB2D00892016 /* libs */,
-			);
-			path = libfreenect;
-			sourceTree = "<group>";
-		};
-		03CB299516E2BB2D00892016 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				03CB299616E2BB2D00892016 /* libfreenect */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		03CB299616E2BB2D00892016 /* libfreenect */ = {
-			isa = PBXGroup;
-			children = (
-				03CB299716E2BB2D00892016 /* libfreenect-registration.h */,
-				03CB299816E2BB2D00892016 /* libfreenect.h */,
-				03CB299916E2BB2D00892016 /* libfreenect_sync.h */,
-			);
-			path = libfreenect;
-			sourceTree = "<group>";
-		};
-		03CB299A16E2BB2D00892016 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				03CB299B16E2BB2D00892016 /* libfreenect.a */,
-				03CB299C16E2BB2D00892016 /* libfreenect_sync.a */,
 			);
 			path = libs;
 			sourceTree = "<group>";
