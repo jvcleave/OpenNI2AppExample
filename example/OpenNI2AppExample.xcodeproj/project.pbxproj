@@ -64,6 +64,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FD835B5E172CBAEC00A3E8BC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -379,6 +388,7 @@
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
+				FD835B5E172CBAEC00A3E8BC /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -443,7 +453,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\n#you will need this if you use on a different project\ncp -R \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/osx/OpenNI2\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/OpenNI2\";";
+			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\n#you will need this if you use on a different project\n#cp -R \"$PROJECT_DIR/addons/ofxOpenNI2Grabber/libs/openni2/libs/osx/OpenNI2\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/#MacOS/OpenNI2\";";
 		};
 /* End PBXShellScriptBuildPhase section */
 
